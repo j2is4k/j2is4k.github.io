@@ -1,0 +1,351 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>4. Reporter &mdash; Xperior 1.3.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.3.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="top" title="Xperior 1.3.0 documentation" href="../index.html" />
+    <link rel="next" title="5. Advanced Concepts" href="adv_concepts.html" />
+    <link rel="prev" title="3. Communicator" href="communicator.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="adv_concepts.html" title="5. Advanced Concepts"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="communicator.html" title="3. Communicator"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Xperior 1.3.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">4. Reporter</a><ul>
+<li><a class="reference internal" href="#general-description">4.1. General description</a><ul>
+<li><a class="reference internal" href="#selection-of-script-directory">4.1.1. Selection of Script directory</a></li>
+<li><a class="reference internal" href="#selection-of-report-directory">4.1.2. Selection of Report directory</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#control-elements">4.2. Control elements</a></li>
+<li><a class="reference internal" href="#properties">4.3. Properties</a><ul>
+<li><a class="reference internal" href="#multiple-users-administration">4.3.1. Multiple-users administration</a></li>
+<li><a class="reference internal" href="#selectable-scripts-and-reports-view-depending-on-folder-depth">4.3.2. Selectable scripts and reports view depending on folder depth</a></li>
+<li><a class="reference internal" href="#list-view-mode">4.3.3. List view mode</a></li>
+<li><a class="reference internal" href="#compare-view-mode">4.3.4. Compare view mode</a></li>
+<li><a class="reference internal" href="#editable-report-panel-with-hyperlink-to-pre-selected-location">4.3.5. Editable report panel with hyperlink to pre-selected location</a></li>
+<li><a class="reference internal" href="#script-description">4.3.6. Script description</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#reports-export">4.4. Reports Export</a></li>
+<li><a class="reference internal" href="#description-macro">4.5. Description Macro</a></li>
+<li><a class="reference internal" href="#performance">4.6. Performance</a></li>
+<li><a class="reference internal" href="#testing-cycle">4.7. Testing Cycle</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="communicator.html"
+                        title="previous chapter">3. Communicator</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="adv_concepts.html"
+                        title="next chapter">5. Advanced Concepts</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/rsts/reporter.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="reporter">
+<span id="id1"></span><h1>4. Reporter<a class="headerlink" href="#reporter" title="Permalink to this headline">¶</a></h1>
+<div class="sidebar">
+<p class="first sidebar-title">Summary</p>
+<table class="last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Info:</th><td class="field-body">Reporter, test results administration database.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Target:</th><td class="field-body">users</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Status:</th><td class="field-body">mature</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p id="index-0">Reporter offers clear overview and multiple-users administration of test results reports. Tests result reporting is an important part of testing cycle.</p>
+<p>Let&#8217;s consider that you have a script controlling and measuring maximal RF power of certain UE. Test results passes for firmware version x.y but fails for x.z. You also know that the results differ for tester A and tester B and that they may use different version of the script. The test logs and UE logs are available on network drive.</p>
+<p>To transform a chaos to the order, keep reading further about Reporter. Real example from <tt class="docutils literal"><span class="pre">[Xperior</span> <span class="pre">distribution]\addons\</span></tt> is part of following description...</p>
+<hr class="docutils" />
+<div class="section" id="general-description">
+<h2>4.1. General description<a class="headerlink" href="#general-description" title="Permalink to this headline">¶</a></h2>
+<p>By structuring the example in introduction, we get that a <strong>generic test</strong> is defined by <em>test name</em> and generates a <em>test result</em> and <em>test result description</em>. <strong>Test environment (Reporter)</strong> defines additionally <em>test art</em>, <em>sub-, version</em> of DUT, <em>time and date</em> and <em>duration</em> of the test, <em>reporter name</em> and <em>file storage location</em> of generated logs. Combination of these elements creates a <strong>report entry</strong>. Graphical interpretation is drawn on following figure.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Mentioned parameter names, count and overall structure can by customised on runtime, e.g. in <a class="reference internal" href="adv_concepts.html#startup"><em>Startup File and Xperior Library</em></a></p>
+</div>
+<div class="figure align-left" style="width: 100%">
+<img alt="../_images/XPERIOR-Reporter-Functionality-Block.jpg" src="../_images/XPERIOR-Reporter-Functionality-Block.jpg" />
+<p class="caption">Figure: Reporter functionality block</p>
+</div>
+<p>Typical test suite consists of fixed set of scripts and variable count of <strong>report entries</strong>. Scripts are defined by unique <em>test names</em>. The number of <strong>report entries</strong> evolves with tested software or firmware development. In <strong>Reporter</strong> this evolution is divided to <em>major</em> and <em>minor versions</em>. Logically <em>major version</em> is superordinate and contains one or more <em>minor versions</em>. It would be possible to define higher level of versions, but it will also add disproportinally more complexity to the application. Therefore we stay by two.</p>
+<div class="section" id="selection-of-script-directory">
+<h3>4.1.1. Selection of Script directory<a class="headerlink" href="#selection-of-script-directory" title="Permalink to this headline">¶</a></h3>
+<p>List of the unique <em>test names</em> is created from the script names, more specifically from final component of absolute path without extension. List of absolute paths is result of searching for files with <tt class="docutils literal"><span class="pre">*.i?e</span></tt> extension contained in Scripts directory.</p>
+<p>To create unique <em>test names</em> press <tt class="docutils literal"><span class="pre">Select</span> <span class="pre">Scripts</span></tt> button and select a directory containing script files.:</p>
+<div class="highlight-python"><pre>For learning purpose, select [Xperior distribution]\addons\multitesting.</pre>
+</div>
+</div>
+<div class="section" id="selection-of-report-directory">
+<h3>4.1.2. Selection of Report directory<a class="headerlink" href="#selection-of-report-directory" title="Permalink to this headline">¶</a></h3>
+<p>The final product of <em>major version</em> is understood as milestone, such customer release and is commonly the last stable <em>minor version</em>. All the <strong>report entries</strong> for certain <em>major version</em> are stored in <tt class="docutils literal"><span class="pre">[major_version_name]_report.txt</span></tt> file. <strong>Report entries</strong> contain one or more different <em>minor versions</em> (alpha, beta version, daily builds, etc). Single <em>minor version</em> only means that <em>major version</em> = <em>minor version</em> and such case is unusual.</p>
+<p><tt class="docutils literal"><span class="pre">[major_version_name]_report.txt</span></tt> file can be selected by <tt class="docutils literal"><span class="pre">Select</span> <span class="pre">Reports</span></tt> button. You select a directory containing reports files and than choose your <em>major version</em> reports. Why you have to specify a directory instead of just a file is explained later in chapter <a class="reference internal" href="#compare">compare</a>.:</p>
+<div class="highlight-python"><pre>For learning purpose, select [Xperior distribution]\addons\multitesting\reports and than specify v.2.4_report.txt.</pre>
+</div>
+</div>
+</div>
+<div class="section" id="control-elements">
+<h2>4.2. Control elements<a class="headerlink" href="#control-elements" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="7%" />
+<col width="6%" />
+<col width="86%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Widget Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><em>Select Reports</em></td>
+<td>Button</td>
+<td>selects a directory containing report files. Search for files in all subdirectories</td>
+</tr>
+<tr class="row-odd"><td><em>Select Scripts</em></td>
+<td>Button</td>
+<td>selects a directory containing script files. Search for files in all subdirectories. Wildcard of script files is <tt class="docutils literal"><span class="pre">*.i?e</span></tt></td>
+</tr>
+<tr class="row-even"><td><em>Filter</em></td>
+<td>Search Control</td>
+<td>displays only script files containing that string</td>
+</tr>
+<tr class="row-odd"><td><em>Create</em></td>
+<td>Button</td>
+<td>create a new report file</td>
+</tr>
+<tr class="row-even"><td><em>Save</em></td>
+<td>Button</td>
+<td><tt class="kbd docutils literal"><span class="pre">Alt</span> <span class="pre">+</span> <span class="pre">F12</span></tt> - <a class="reference internal" href="#multiple-admin"><em>saves(!)</em></a> and reloads the content of current report file - <em>major version</em></td>
+</tr>
+<tr class="row-odd"><td><em>Remove</em></td>
+<td>Button</td>
+<td>removes a report file (<tt class="docutils literal"><span class="pre">*.bak</span></tt> will be created)</td>
+</tr>
+<tr class="row-even"><td><em>Update</em></td>
+<td>Button</td>
+<td>re-collect reports from already selected report file.</td>
+</tr>
+<tr class="row-odd"><td><em>New Report</em></td>
+<td>Button</td>
+<td><tt class="kbd docutils literal"><span class="pre">Alt</span> <span class="pre">+</span> <span class="pre">N</span></tt> - creates a new report entry for selected script file</td>
+</tr>
+<tr class="row-even"><td><em>Save Report</em></td>
+<td>Button</td>
+<td><tt class="kbd docutils literal"><span class="pre">Alt</span> <span class="pre">+</span> <span class="pre">S</span></tt> - saves locally new or modified report entry for selected script file. Data will be lost when selecting another report entry without saving it before. Use Save button when you changes are final</td>
+</tr>
+<tr class="row-odd"><td><em>Del Report</em></td>
+<td>Button</td>
+<td><tt class="kbd docutils literal"><span class="pre">Alt</span> <span class="pre">+</span> <span class="pre">D</span></tt> - for selected script file deletes report entry from internal hash</td>
+</tr>
+<tr class="row-even"><td><em>Major version</em></td>
+<td>Choice Control</td>
+<td>switches between major versions</td>
+</tr>
+<tr class="row-odd"><td><em>View element</em></td>
+<td>Choice Control</td>
+<td>in compare view mode changes which report element should be displayed</td>
+</tr>
+<tr class="row-even"><td><em>View mode</em></td>
+<td>Radio Button</td>
+<td>switches between <a class="reference internal" href="#list"><em>List view mode</em></a> and <a class="reference internal" href="#compare"><em>Compare view mode</em></a></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="properties">
+<h2>4.3. Properties<a class="headerlink" href="#properties" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="multiple-users-administration">
+<span id="multiple-admin"></span><h3>4.3.1. Multiple-users administration<a class="headerlink" href="#multiple-users-administration" title="Permalink to this headline">¶</a></h3>
+<p>applies on the cases where <tt class="docutils literal"><span class="pre">[major_version_name]_report.txt</span></tt> is shared by multiple users. Than the reports can be created/modifed/deleted by users simultaneously. You, as the one of the user, see the changes done by other users when you:</p>
+<ul class="simple">
+<li>update the <em>major version</em> with <tt class="docutils literal"><span class="pre">Update</span></tt> button or</li>
+<li>save the <em>major version</em> with <tt class="docutils literal"><span class="pre">Save</span></tt> button or</li>
+<li>change the <em>major version</em></li>
+</ul>
+<p>It is guaranted that the <strong>report file</strong> is written sequentially even in multi-user environment by using <tt class="docutils literal"><span class="pre">file_lock</span></tt> module, offering cross-platform compatible file locking mechanism in the same process as well as across processes.</p>
+</div>
+<div class="section" id="selectable-scripts-and-reports-view-depending-on-folder-depth">
+<h3>4.3.2. Selectable scripts and reports view depending on folder depth<a class="headerlink" href="#selectable-scripts-and-reports-view-depending-on-folder-depth" title="Permalink to this headline">¶</a></h3>
+<p>As mentioned at the beginning of the chapter, user has to specify the top directory where to start searching and collecting the <em>test names</em>. Thus, selecting subdirectory as a top one will result in collecting data just only from this one down. It is useful to examine just say Stress Test folder instead of Stress and Functionality folders.</p>
+<p>The same scheme is valid also for reports. With selected <em>top directory</em> user can observe/analyze reports inside certain directory structure = major version group. It is useful to combine with Compare View Mode.</p>
+</div>
+<div class="section" id="list-view-mode">
+<span id="list"></span><h3>4.3.3. List view mode<a class="headerlink" href="#list-view-mode" title="Permalink to this headline">¶</a></h3>
+<p>This view offers list sorting feature, defined by left clicking on a column label. Also right click on list item opens popup menu. From here is possible to e.g. open the script in <a class="reference internal" href="communicator.html#communicator"><em>Communicator</em></a>. <strong>Report entry</strong> manipulation is available via editable report panel. Green arrow reflects the ascending or descending sort order. Sorting method key for PROBLEMS is severity, for NR. integer based, others string based. Bitmap &#8220;new&#8221; informs if the report is not older than 30 days; date of origin is given by DATE element.</p>
+<div class="figure align-left" style="width: 100%">
+<img alt="../_images/XPERIOR-Reporter-ListViewMode.jpg" src="../_images/XPERIOR-Reporter-ListViewMode.jpg" />
+<p class="caption">Figure: List view mode</p>
+</div>
+</div>
+<div class="section" id="compare-view-mode">
+<span id="compare"></span><h3>4.3.4. Compare view mode<a class="headerlink" href="#compare-view-mode" title="Permalink to this headline">¶</a></h3>
+<p>All <em>major versions</em> (report files) are collected from selected <em>top directory</em>, alphabetically sorted and all presented <em>minor versions</em> are set as columns in a new grid table. In dependence on <em>View element</em> selection, all elements from <strong>report entry</strong> can be compared across the <em>major</em> and <em>minor versions</em>. Slight opacity appears over <em>all minor versions</em> belonging to one selected major version. Compare the next two figures.</p>
+<p>Reading from editable report panel is enabled in this mode, but modification of entries is disabled.</p>
+<div class="figure align-left" style="width: 100%">
+<img alt="../_images/XPERIOR-Reporter-ComparingMajorVersions.jpg" src="../_images/XPERIOR-Reporter-ComparingMajorVersions.jpg" />
+<p class="caption">Figure: Compare view mode</p>
+</div>
+</div>
+<div class="section" id="editable-report-panel-with-hyperlink-to-pre-selected-location">
+<h3>4.3.5. Editable report panel with hyperlink to pre-selected location<a class="headerlink" href="#editable-report-panel-with-hyperlink-to-pre-selected-location" title="Permalink to this headline">¶</a></h3>
+<p>All of <strong>report entry</strong> elements ([&#8216;TEST ART&#8217;|&#8217;TEST COUNT&#8217;], &#8216;PROBLEM&#8217;, &#8216;VERSION&#8217;, &#8216;DATE&#8217;, &#8216;DURATION&#8217;, &#8216;REPORTER&#8217;, &#8216;DESCRIPTION&#8217;, &#8216;HYPERLINK&#8217; and &#8216;NR.&#8217;) can be modified here. Additionally <tt class="docutils literal"><span class="pre">UPDATE</span></tt> button has been added to DATE entry option, <tt class="docutils literal"><span class="pre">SUMMARY</span></tt> button for creating resume of report and <tt class="docutils literal"><span class="pre">DESC.</span> <span class="pre">MACRO</span></tt>, see <a class="reference internal" href="#desc-macro"><em>Description Macro</em></a> for more.</p>
+<div class="figure align-left" style="width: 100%">
+<img alt="../_images/XPERIOR-Reporter-EditableReportPanel.jpg" src="../_images/XPERIOR-Reporter-EditableReportPanel.jpg" />
+<p class="caption">Figure: Editable report panel</p>
+</div>
+</div>
+<div class="section" id="script-description">
+<h3>4.3.6. Script description<a class="headerlink" href="#script-description" title="Permalink to this headline">¶</a></h3>
+<p>Extra panel contains header part of selected script. Header part of your &#8216;<a href="#id2"><span class="problematic" id="id3">*</span></a>.i?e&#8217; file needs to meet &#8220;requirements for script form&#8221; in order to be parsed correctly. Panel is also used as output for report resume. Furthermore, double clicking on chosen line, appends this line to the Communicator?s Commands Editor.</p>
+<div class="figure align-left" style="width: 100%">
+<img alt="../_images/XPERIOR-Reporter-ScriptsDescription.jpg" src="../_images/XPERIOR-Reporter-ScriptsDescription.jpg" />
+<p class="caption">Figure: Script description</p>
+</div>
+</div>
+</div>
+<div class="section" id="reports-export">
+<h2>4.4. Reports Export<a class="headerlink" href="#reports-export" title="Permalink to this headline">¶</a></h2>
+<p>offers a possiblity to export the reports to MS Excel sheet. Two buttons are defined for this purpose. <tt class="docutils literal"><span class="pre">Export</span></tt> exports currently visible view, where <tt class="docutils literal"><span class="pre">Export</span> <span class="pre">All</span></tt> exports predefined sets of most usefull tables from <strong>Compare view</strong> mode and <strong>List view</strong> mode.</p>
+<div class="figure align-left" style="width: 100%">
+<img alt="../_images/XPERIOR-Reporter-ExportInList.jpg" src="../_images/XPERIOR-Reporter-ExportInList.jpg" />
+<p class="caption">Figure: Reporter Export</p>
+</div>
+<div class="figure align-left" style="width: 100%">
+<img alt="../_images/XPERIOR-Reporter-ExportAllInCompare.jpg" src="../_images/XPERIOR-Reporter-ExportAllInCompare.jpg" />
+<p class="caption">Figure: Reporter Export All</p>
+</div>
+</div>
+<div class="section" id="description-macro">
+<span id="desc-macro"></span><h2>4.5. Description Macro<a class="headerlink" href="#description-macro" title="Permalink to this headline">¶</a></h2>
+<p>can be used for generation of semi-automated report entry description. Macro is user-declared procedure defined in form of python code. Macro declarations are stored locally under user&#8217;s application path. Use <em>macro_example</em> as a template for your new macro.</p>
+<div class="figure align-left" style="width: 100%">
+<img alt="../_images/XPERIOR-Reporter-description-macro.jpg" src="../_images/XPERIOR-Reporter-description-macro.jpg" />
+<p class="caption">Figure: Description macro - example</p>
+</div>
+</div>
+<div class="section" id="performance">
+<h2>4.6. Performance<a class="headerlink" href="#performance" title="Permalink to this headline">¶</a></h2>
+<p>Using adaptive compression method for report files and &#8220;virtual list&#8221; approach for both, list and compare view modes, the perfomance hugely improved since version 1.9.0. With test setup having 4 report files, each with 10000 reports, 100 minor versions and description containing 0-10kB of characters, the <strong>startup time</strong> has been reduced to <strong>3 seconds (from previous 66 seconds)</strong>.</p>
+</div>
+<div class="section" id="testing-cycle">
+<h2>4.7. Testing Cycle<a class="headerlink" href="#testing-cycle" title="Permalink to this headline">¶</a></h2>
+<p>Although variations exist between organizations, there is a typical cycle for testing.</p>
+<ul class="simple">
+<li><strong>Requirements analysis</strong>: Testing should begin in the requirements phase of the software development life cycle. During the design phase, testers work with developers in determining what aspects of a design are testable and with what parameters those tests work.</li>
+<li><strong>Test planning</strong>: Test strategy, test plan, testbed creation. Since many activities will be carried out during testing, a plan is needed.</li>
+<li><strong>Test development</strong>: Test procedures, test scenarios, test cases, test datasets, test scripts to use in testing software.</li>
+<li><strong>Test execution</strong>: Testers execute the software based on the plans and tests and report any errors found to the development team.</li>
+<li><strong>Test reporting</strong>: <tt class="docutils literal"><span class="pre">Once</span> <span class="pre">testing</span> <span class="pre">is</span> <span class="pre">completed,</span> <span class="pre">testers</span> <span class="pre">generate</span> <span class="pre">metrics</span> <span class="pre">and</span> <span class="pre">make</span> <span class="pre">final</span> <span class="pre">reports</span> <span class="pre">on</span> <span class="pre">their</span> <span class="pre">test</span> <span class="pre">effort</span> <span class="pre">and</span> <span class="pre">whether</span> <span class="pre">or</span> <span class="pre">not</span> <span class="pre">the</span> <span class="pre">software</span> <span class="pre">tested</span> <span class="pre">is</span> <span class="pre">ready</span> <span class="pre">for</span> <span class="pre">release.</span></tt></li>
+<li><strong>Test result analysis</strong>: Or Defect Analysis, is done by the development team usually along with the client, in order to decide what defects should be treated, fixed, rejected (i.e. found software working properly) or deferred to be dealt with later.</li>
+<li><strong>Defect Retesting</strong>: Once a defect has been dealt with by the development team, it is retested by the testing team.</li>
+<li><strong>Regression testing</strong>: It is common to have a small test program built of a subset of tests, for each integration of new, modified, or fixed software, in order to ensure that the latest delivery has not ruined anything, and that the software product as a whole is still working correctly.</li>
+<li><strong>Test Closure</strong>: Once the test meets the exit criteria, the activities such as capturing the key outputs, lessons learned, results, logs, documents related to the project are archived and used as a reference for future projects.</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="adv_concepts.html" title="5. Advanced Concepts"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="communicator.html" title="3. Communicator"
+             >previous</a> |</li>
+        <li><a href="../index.html">Xperior 1.3.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, noriba GmbH.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

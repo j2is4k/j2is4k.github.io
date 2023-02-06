@@ -1,0 +1,581 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>1. Xperior Library &mdash; Xperior 1.3.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.3.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="top" title="Xperior 1.3.0 documentation" href="../index.html" />
+    <link rel="up" title="5. Advanced Concepts" href="adv_concepts.html" />
+    <link rel="next" title="2. Multitesting" href="multitesting.html" />
+    <link rel="prev" title="5. Advanced Concepts" href="adv_concepts.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="multitesting.html" title="2. Multitesting"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="adv_concepts.html" title="5. Advanced Concepts"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Xperior 1.3.0 documentation</a> &raquo;</li>
+          <li><a href="adv_concepts.html" accesskey="U">5. Advanced Concepts</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">1. Xperior Library</a><ul>
+<li><a class="reference internal" href="#usage">1.1. Usage</a></li>
+<li><a class="reference internal" href="#api-description">1.2. API description</a><ul>
+<li><a class="reference internal" href="#classes">1.2.1. Classes</a></li>
+<li><a class="reference internal" href="#module-xlib">1.2.2. Functions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="adv_concepts.html"
+                        title="previous chapter">5. Advanced Concepts</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="multitesting.html"
+                        title="next chapter">2. Multitesting</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/rsts/xlib.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="xperior-library">
+<span id="xperior-lib"></span><h1>1. Xperior Library<a class="headerlink" href="#xperior-library" title="Permalink to this headline">¶</a></h1>
+<div class="sidebar">
+<p class="first sidebar-title">Summary</p>
+<table class="last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Info:</th><td class="field-body">concept of additional configurations, features and services. It is recommended to use existing code to avoid <a class="reference external" href="http://en.wikipedia.org/wiki/Reinventing_the_wheel">reinventing the wheel</a>. Other modules similar to xlib can and are presented in xlib as well, extending such code and structuring it into groups.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Target:</th><td class="field-body">users</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Status:</th><td class="field-body">mature</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p id="index-0">Functions, procedures, classes, etc. - generally objects coded in xlib.py file, comes with version of XPERIOR. Users are encouraged to use xlib&#8217;s objects in test scripts itself to simplify and improve the coding. The backward compatibility of objects defined in xlib is mather of discipline of file developers</p>
+<hr class="docutils" />
+<p>Figure shows which kind of libraries is used by the application.</p>
+<div class="figure align-left" style="width: 100%">
+<img alt="../_images/XPERIOR-libraries.jpg" src="../_images/XPERIOR-libraries.jpg" />
+<p class="caption">Figure: Xperior Libraries</p>
+</div>
+<div class="section" id="usage">
+<h2>1.1. Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>All of the &#8220;objects&#8221; described are accessible from xlib object in current namespace. The reason is clarity.</p>
+<div class="figure align-left" style="width: 100%">
+<img alt="rsts\../images/XPERIOR-xlib-global_1.jpg" src="rsts\../images/XPERIOR-xlib-global_1.jpg" />
+<p class="caption">Figure: Accessing functions</p>
+</div>
+<div class="figure align-left" style="width: 100%">
+<img alt="rsts\../images/XPERIOR-xlib-global_2.jpg" src="rsts\../images/XPERIOR-xlib-global_2.jpg" />
+<p class="caption">Figure: Getting tips</p>
+</div>
+</div>
+<div class="section" id="api-description">
+<h2>1.2. API description<a class="headerlink" href="#api-description" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="classes">
+<h3>1.2.1. Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="xlib.Cleartool">
+<em class="property">class </em><tt class="descclassname">xlib.</tt><tt class="descname">Cleartool</tt><a class="reference internal" href="../_modules/xlib.html#Cleartool"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xlib.Cleartool" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cleartool in Python.</p>
+<p>Clearcase command will be executed with os.P_WAIT flag.</p>
+<p>Not all &#8220;cleartool&#8221; commands are rewritten as instance methods.
+If you want to use another command, make it like this:</p>
+<blockquote>
+<div>self._command = &#8220;another_command param1 param2 param3&#8221;</div></blockquote>
+<dl class="method">
+<dt id="xlib.Cleartool.add_to_source_control">
+<tt class="descname">add_to_source_control</tt><big>(</big><em>file_path</em><big>)</big><a class="reference internal" href="../_modules/xlib.html#Cleartool.add_to_source_control"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xlib.Cleartool.add_to_source_control" title="Permalink to this definition">¶</a></dt>
+<dd><p>self._command = &#8216;mkelem -nco -mkpath -c autocomment %s&#8217;%file_path</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xlib.Cleartool.checkin">
+<tt class="descname">checkin</tt><big>(</big><em>file_path</em>, <em>comment</em><big>)</big><a class="reference internal" href="../_modules/xlib.html#Cleartool.checkin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xlib.Cleartool.checkin" title="Permalink to this definition">¶</a></dt>
+<dd><p>self._command = &#8216;checkin -c %s %s&#8217; %(comment, file_path)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xlib.Cleartool.checkout">
+<tt class="descname">checkout</tt><big>(</big><em>file_path</em><big>)</big><a class="reference internal" href="../_modules/xlib.html#Cleartool.checkout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xlib.Cleartool.checkout" title="Permalink to this definition">¶</a></dt>
+<dd><p>self._command = &#8216;checkout -reserved -nc %s&#8217; %file_path</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xlib.Cleartool.compare">
+<tt class="descname">compare</tt><big>(</big><em>file_path</em><big>)</big><a class="reference internal" href="../_modules/xlib.html#Cleartool.compare"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xlib.Cleartool.compare" title="Permalink to this definition">¶</a></dt>
+<dd><p>self._command = &#8216;diff -graphical -predecessor %s&#8217; %file_path</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xlib.Cleartool.history">
+<tt class="descname">history</tt><big>(</big><em>file_path</em><big>)</big><a class="reference internal" href="../_modules/xlib.html#Cleartool.history"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xlib.Cleartool.history" title="Permalink to this definition">¶</a></dt>
+<dd><p>self._command = &#8216;lshistory -graphical &#8220;%s&#8221;&#8217; %file_path</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xlib.Cleartool.undo_checkout">
+<tt class="descname">undo_checkout</tt><big>(</big><em>file_path</em><big>)</big><a class="reference internal" href="../_modules/xlib.html#Cleartool.undo_checkout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xlib.Cleartool.undo_checkout" title="Permalink to this definition">¶</a></dt>
+<dd><p>self._command = &#8216;uncheckout -keep &#8220;%s&#8221;&#8217; %file_path</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xlib.Cleartool.version_tree">
+<tt class="descname">version_tree</tt><big>(</big><em>file_path</em><big>)</big><a class="reference internal" href="../_modules/xlib.html#Cleartool.version_tree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xlib.Cleartool.version_tree" title="Permalink to this definition">¶</a></dt>
+<dd><p>self._command = &#8216;lsvtree -graphical &#8220;%s&#8221;&#8217; %file_path</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="xlib.MessageDialog">
+<em class="property">class </em><tt class="descclassname">xlib.</tt><tt class="descname">MessageDialog</tt><big>(</big><em>parent</em>, <em>message</em>, <em>caption</em>, <em>*arg</em>, <em>**keyw</em><big>)</big><a class="reference internal" href="../_modules/xlib.html#MessageDialog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xlib.MessageDialog" title="Permalink to this definition">¶</a></dt>
+<dd><p>MessageDailog.</p>
+<p>Derived class from wx.MessageDialog. Supports multitesting feature -&gt;
+object&#8217;s ShowModal method will be replaced with function printing info
+and always returns wx.ID_YES.</p>
+<dl class="method">
+<dt id="xlib.MessageDialog.ShowModal">
+<tt class="descname">ShowModal</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/xlib.html#MessageDialog.ShowModal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xlib.MessageDialog.ShowModal" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-xlib">
+<span id="functions"></span><h3>1.2.2. Functions<a class="headerlink" href="#module-xlib" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="xlib.bin2dec">
+<tt class="descclassname">xlib.</tt><tt class="descname">bin2dec</tt><big>(</big><em>bin_str</em><big>)</big><a class="reference internal" href="../_modules/xlib.html#bin2dec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xlib.bin2dec" title="Permalink to this definition">¶</a></dt>
+<dd><p>binary to decimal conversion -&gt; int.</p>
+<p>Returns integer of input binary string.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xlib.bin2hex">
+<tt class="descclassname">xlib.</tt><tt class="descname">bin2hex</tt><big>(</big><em>bin_str</em><big>)</big><a class="reference internal" href="../_modules/xlib.html#bin2hex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xlib.bin2hex" title="Permalink to this definition">¶</a></dt>
+<dd><p>binary to hexadecimal conversion -&gt; string.</p>
+<p>Returns hexadecimal string of input binary string.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xlib.copy_remote_file_from">
+<tt class="descclassname">xlib.</tt><tt class="descname">copy_remote_file_from</tt><big>(</big><em>device</em>, <em>from_path</em>, <em>to_path</em><big>)</big><a class="reference internal" href="../_modules/xlib.html#copy_remote_file_from"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xlib.copy_remote_file_from" title="Permalink to this definition">¶</a></dt>
+<dd><p>Copy remote file from VISA interface -&gt; None.</p>
+<p>Device specifies remote device. Both paths are absolute file paths. If file
+on device doesn&#8217;t exist, &#8220;to_path&#8221; file content will carry error message.</p>
+<dl class="docutils">
+<dt>Note: </dt>
+<dd><ul class="first last simple">
+<li>path names like: r&#8217;parentchild&#8217; or &#8216;parent\child&#8217;</li>
+<li>File size is limited to 999.999999 MB.</li>
+<li>Use remote device&#8217;s &#8216;D:&#8217; drive (user guide recommendation).</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="xlib.copy_remote_file_to">
+<tt class="descclassname">xlib.</tt><tt class="descname">copy_remote_file_to</tt><big>(</big><em>device</em>, <em>from_path</em>, <em>to_path</em><big>)</big><a class="reference internal" href="../_modules/xlib.html#copy_remote_file_to"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xlib.copy_remote_file_to" title="Permalink to this definition">¶</a></dt>
+<dd><p>Copy remote file to VISA interface -&gt; None.</p>
+<p>Device specifies remote device. Both paths are absolute file paths. IOError
+exception will be raised, if file on &#8220;from_path&#8221; doesn&#8217;t exist.</p>
+<dl class="docutils">
+<dt>Note: </dt>
+<dd><ul class="first last simple">
+<li>path names like: r&#8217;parentchild&#8217; or &#8216;parent\child&#8217;</li>
+<li>File size is limited to 999.999999 MB.</li>
+<li>Use remote device&#8217;s &#8216;D:&#8217; drive (user guide recommendation).</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="xlib.correlation">
+<tt class="descclassname">xlib.</tt><tt class="descname">correlation</tt><big>(</big><em>pattern1</em>, <em>pattern2</em>, <em>tolerance=0</em><big>)</big><a class="reference internal" href="../_modules/xlib.html#correlation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xlib.correlation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Binary Correlation Function -&gt; list of &#8220;K&#8221;s.</p>
+<p>both arguments have to be either strings or lists of numbers. If numbers,
+absolute tolerance can be specified with &#8216;tolerance&#8217; keyword. If &#8216;pattern1&#8217;
+is larger than &#8216;pattern2&#8217;, patterns are switched. Function returns list of
+K[%]. K is instantaneous correlation value according to the formula:</p>
+<blockquote>
+<div>Matches - NonMatches</div></blockquote>
+<dl class="docutils">
+<dt>K[%] = &#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;- * 100</dt>
+<dd>Matches + NonMatches</dd>
+</dl>
+<p>+===================================================+
+|                pattern 2                          |
++===========+=======================================+
+| pattern 1 |
++===========+                           +===========+
+|                                       | pattern 1 |
+| correlation shifts                    +===========+
+<a href="#id1"><span class="problematic" id="id2">|&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;|</span></a></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xlib.create_panel">
+<tt class="descclassname">xlib.</tt><tt class="descname">create_panel</tt><big>(</big><em>type</em>, <em>name</em>, <em>show=True</em><big>)</big><a class="reference internal" href="../_modules/xlib.html#create_panel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xlib.create_panel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a panel parented to AUI FrameManager of the app -&gt; panel instance.</p>
+<p>Get certain type of Frame which can be used for general purpose. Such a 
+frame can be used in script as well as in Shell.</p>
+<dl class="docutils">
+<dt>Available frame types are:</dt>
+<dd>&#8220;&#8221;          .. just a simple frame
+&#8220;TextCtrl&#8221;  .. with TextCtrl and write_text and clear_all methods
+&#8220;Plot&#8221;      .. with Matplotlib Plot Grid</dd>
+</dl>
+<p>Name variable sets not only the Frame caption but also identifies the Frame 
+itself, i.e. calling the function with the same arguments just reactive the 
+already created frame. Note the the same &#8220;name&#8221; can&#8217;t by used for different
+&#8220;type&#8221;s.</p>
+<dl class="docutils">
+<dt>See examples in libexamples and </dt>
+<dd>libmatplotlib_graph_examples</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="xlib.delete_remote_file">
+<tt class="descclassname">xlib.</tt><tt class="descname">delete_remote_file</tt><big>(</big><em>device</em>, <em>path</em><big>)</big><a class="reference internal" href="../_modules/xlib.html#delete_remote_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xlib.delete_remote_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete remote file from VISA interface -&gt; None.</p>
+<p>Device specifies remote device. Path is an absolute file path. If file
+on device doesn&#8217;t exist, &#8220;path&#8221; file content will carry error message.</p>
+<p>Note: Use remote device&#8217;s &#8216;D:&#8217; drive (user guide recommendation).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xlib.execute_stop">
+<tt class="descclassname">xlib.</tt><tt class="descname">execute_stop</tt><big>(</big><em>reason=''</em><big>)</big><a class="reference internal" href="../_modules/xlib.html#execute_stop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xlib.execute_stop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Force Stop of the running script -&gt; None.</p>
+<p>It stops in Communicator&#8217;s Editor currently running script.
+It is same as click on &#8216;Stop&#8217; button or Ctrl+T shortcut.</p>
+<p>If multitesting, RuntimeError is raised, which can by catched by single 
+script execution, storing appropriate verdict and starts next test in 
+the queue...</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xlib.findattr">
+<tt class="descclassname">xlib.</tt><tt class="descname">findattr</tt><big>(</big><em>start_obj</em>, <em>string</em>, <em>ignorecase=True</em>, <em>depth=0</em>, <em>list_print=True</em><big>)</big><a class="reference internal" href="../_modules/xlib.html#findattr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xlib.findattr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find attributes -&gt; list of strings.</p>
+<p>Returns list of attributes of specified object. Search recursively for the 
+depth of &#8216;depth&#8217;.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xlib.get_files">
+<tt class="descclassname">xlib.</tt><tt class="descname">get_files</tt><big>(</big><em>top</em>, <em>wildcard='*.*'</em><big>)</big><a class="reference internal" href="../_modules/xlib.html#get_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xlib.get_files" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all files from certain location -&gt; filepaths list.</p>
+<p>Search top directory with complete subdirectory structure and collect 
+absolute filepaths matching wildcard.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xlib.get_screen">
+<tt class="descclassname">xlib.</tt><tt class="descname">get_screen</tt><big>(</big><em>device</em>, <em>display=True</em><big>)</big><a class="reference internal" href="../_modules/xlib.html#get_screen"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xlib.get_screen" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes printscreen of target remote device -&gt; filepath.</p>
+<p>File is saved on remote device and transferred to user&#8217;s local machine.
+Local filepath is returned. File is also executed with os.startfile if
+&#8220;display&#8221; is set to True</p>
+<p>Note: Because of different remote commands is currently supported: FSQ.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xlib.get_script_dir">
+<tt class="descclassname">xlib.</tt><tt class="descname">get_script_dir</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/xlib.html#get_script_dir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xlib.get_script_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>From active Commands Editor Tab -&gt; directory path.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xlib.get_script_path">
+<tt class="descclassname">xlib.</tt><tt class="descname">get_script_path</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/xlib.html#get_script_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xlib.get_script_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>From active Commands Editor Tab -&gt; file path.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xlib.hex2bin">
+<tt class="descclassname">xlib.</tt><tt class="descname">hex2bin</tt><big>(</big><em>hex_str</em><big>)</big><a class="reference internal" href="../_modules/xlib.html#hex2bin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xlib.hex2bin" title="Permalink to this definition">¶</a></dt>
+<dd><p>hexadecimal to binary conversion -&gt; string.</p>
+<p>Returns binary string of input hexadecimal string.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xlib.multi_choice_dialog">
+<tt class="descclassname">xlib.</tt><tt class="descname">multi_choice_dialog</tt><big>(</big><em>options_list</em>, <em>text=None</em><big>)</big><a class="reference internal" href="../_modules/xlib.html#multi_choice_dialog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xlib.multi_choice_dialog" title="Permalink to this definition">¶</a></dt>
+<dd><p>function will be deprecated, please remove it from your scripts.</p>
+<p>Commands Editor user dialog -&gt; integer selection.</p>
+<p>If text is not given, intern message will be used to inform user to choose
+item(s) from options_list. If you want to mark multiple items, enter the 
+sum of item&#8217;s numbers. Function returns a list of selected items.</p>
+<p>Text output is Protocol Trace.
+Text input is Interactive Console.</p>
+<p>Example:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>first</li>
+</ol>
+<p>2. second
+4. third
+8. fourth          ... type 14 to select last 3 items.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="xlib.open_remote_file">
+<tt class="descclassname">xlib.</tt><tt class="descname">open_remote_file</tt><big>(</big><em>device</em>, <em>path</em><big>)</big><a class="reference internal" href="../_modules/xlib.html#open_remote_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xlib.open_remote_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open remote file from VISA interface -&gt; None.</p>
+<p>Device specifies remote device. Path is an absolute file path. If file
+on device doesn&#8217;t exist, &#8220;path&#8221; file content will carry error message.</p>
+<dl class="docutils">
+<dt>Note: File size is limited to 999.999999 MB.</dt>
+<dd>Use remote device&#8217;s &#8216;D:&#8217; drive (user guide recommendation).</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="xlib.permutation">
+<tt class="descclassname">xlib.</tt><tt class="descname">permutation</tt><big>(</big><em>list</em><big>)</big><a class="reference internal" href="../_modules/xlib.html#permutation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xlib.permutation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Permutation -&gt; list.</p>
+<p>Takes a list of objects and returns a generator yielding all permutations.</p>
+<dl class="docutils">
+<dt>Example for clarity:</dt>
+<dd><p class="first">list(permutation([1,2,3])) returns:
+[[1, 2, 3],</p>
+<blockquote class="last">
+<div>[2, 1, 3],
+[2, 3, 1],
+[1, 3, 2],
+[3, 1, 2],
+[3, 2, 1]]</div></blockquote>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="xlib.plot">
+<tt class="descclassname">xlib.</tt><tt class="descname">plot</tt><big>(</big><em>*arg</em>, <em>**keyw</em><big>)</big><a class="reference internal" href="../_modules/xlib.html#plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xlib.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot a graph -&gt; plot instance.</p>
+<p>Plot a single graph and displays the result in separate window. See plot 
+__doc__ at xlib.pltframe.plot.</p>
+<p>Example: plot([x*x for x in xrange(20)])</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xlib.print_list">
+<tt class="descclassname">xlib.</tt><tt class="descname">print_list</tt><big>(</big><em>list</em><big>)</big><a class="reference internal" href="../_modules/xlib.html#print_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xlib.print_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print a list -&gt; None.</p>
+<p>Every element of the list will be printed at the new line.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xlib.report_off">
+<tt class="descclassname">xlib.</tt><tt class="descname">report_off</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/xlib.html#report_off"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xlib.report_off" title="Permalink to this definition">¶</a></dt>
+<dd><p>Disables logging output -&gt; None.</p>
+<p>All strings written to stdout are redirected to the &#8220;black hole&#8221;.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xlib.report_on">
+<tt class="descclassname">xlib.</tt><tt class="descname">report_on</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/xlib.html#report_on"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xlib.report_on" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enables logging output -&gt; None.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xlib.sdir">
+<tt class="descclassname">xlib.</tt><tt class="descname">sdir</tt><big>(</big><em>obj</em>, <em>string=''</em>, <em>ignorecase=True</em>, <em>list_print=True</em>, <em>nobaseclass=False</em><big>)</big><a class="reference internal" href="../_modules/xlib.html#sdir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xlib.sdir" title="Permalink to this definition">¶</a></dt>
+<dd><p>sdir -&gt; list of strings.</p>
+<p>Returns list of attributes of specified object.
+Optionally only these containing &#8216;string&#8217; with or without case sensitivity.
+Optionally will every element of the list will be printed at the new line.
+Optionally only these which are not contained in the base class of the obj
+(baseclass reference stored in __base__ attribute).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xlib.set_system_path">
+<tt class="descclassname">xlib.</tt><tt class="descname">set_system_path</tt><big>(</big><em>absolute_path_without_drive_letter</em><big>)</big><a class="reference internal" href="../_modules/xlib.html#set_system_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xlib.set_system_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Appends path to sys.path -&gt; bool success.</p>
+<p>It will be searched in range of all drivers + 
+absolute_path_without_drive_letter. 
+If absolute path exists, it will be appended to sys.path.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xlib.show_last_error">
+<tt class="descclassname">xlib.</tt><tt class="descname">show_last_error</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/xlib.html#show_last_error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xlib.show_last_error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shows last error logging traceback -&gt; None.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xlib.shutdown">
+<tt class="descclassname">xlib.</tt><tt class="descname">shutdown</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/xlib.html#shutdown"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xlib.shutdown" title="Permalink to this definition">¶</a></dt>
+<dd><p>Switches the local machine OFF -&gt; bool status.</p>
+<p>Also executes XPERIOR&#8217;s OnClose action.</p>
+<p>For security reasons the flag &#8216;_int.modules.control.ENABLE_SHUTDOWN&#8217; has to be set 
+to True.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xlib.shutdown_on_stop">
+<tt class="descclassname">xlib.</tt><tt class="descname">shutdown_on_stop</tt><big>(</big><em>enable=True</em><big>)</big><a class="reference internal" href="../_modules/xlib.html#shutdown_on_stop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xlib.shutdown_on_stop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shutdown the PC when script in Commands Editor stops -&gt; bool status.</p>
+<p>If &#8216;enable&#8217; keyword is set to False, all shutdown procedures will be 
+discarded. See shutdown function at &#8216;_int.control.shutdown()&#8217; for more 
+info.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xlib.simple_socket_query">
+<tt class="descclassname">xlib.</tt><tt class="descname">simple_socket_query</tt><big>(</big><em>host</em>, <em>command</em>, <em>port=4754</em><big>)</big><a class="reference internal" href="../_modules/xlib.html#simple_socket_query"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xlib.simple_socket_query" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sends a command over socket interface -&gt; reply from host.</p>
+<p>Usage example:</p>
+<p>host = &#8216;PDA887C0&#8217;
+power_on = &#8216;Please switch on the UE&#8217;
+power_off = &#8216;Power off UE&#8217;
+am_command(host, power_on)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xlib.single_choice_dialog">
+<tt class="descclassname">xlib.</tt><tt class="descname">single_choice_dialog</tt><big>(</big><em>options_list</em>, <em>text=None</em><big>)</big><a class="reference internal" href="../_modules/xlib.html#single_choice_dialog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xlib.single_choice_dialog" title="Permalink to this definition">¶</a></dt>
+<dd><p>function will be deprecated, please remove it from your scripts.</p>
+<p>Commands Editor user dialog -&gt; integer selection.</p>
+<p>If text is not given, intern message will be used to inform user to choose
+one of the items from options_list. Function returns selected item.</p>
+<p>Text output is Protocol Trace.
+Text input is Interactive Console.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xlib.stop_on_visa_status">
+<tt class="descclassname">xlib.</tt><tt class="descname">stop_on_visa_status</tt><big>(</big><em>instrument</em>, <em>periodically=True</em><big>)</big><a class="reference internal" href="../_modules/xlib.html#stop_on_visa_status"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xlib.stop_on_visa_status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stops on remote device timeout(s) -&gt; None (throw exception).</p>
+<p>If Visa Error Status (VES) is detected, program execution will raise an 
+exception. On next script start, execution stops on first occurrence of 
+VES again if &#8220;periodically&#8221; is True; after 10 otherwise.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xlib.time_since_start">
+<tt class="descclassname">xlib.</tt><tt class="descname">time_since_start</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/xlib.html#time_since_start"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xlib.time_since_start" title="Permalink to this definition">¶</a></dt>
+<dd><p>Time since last script start -&gt; formated string.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xlib.waitkey">
+<tt class="descclassname">xlib.</tt><tt class="descname">waitkey</tt><big>(</big><em>message='press ok to continue'</em><big>)</big><a class="reference internal" href="../_modules/xlib.html#waitkey"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xlib.waitkey" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dialog box -&gt; None.</p>
+<p>Freeze script execution until user responds on initiated modal message box.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xlib.waitkey1">
+<tt class="descclassname">xlib.</tt><tt class="descname">waitkey1</tt><big>(</big><em>info=''</em><big>)</big><a class="reference internal" href="../_modules/xlib.html#waitkey1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xlib.waitkey1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Script execution will be paused -&gt; None.</p>
+<p>Will be paused on this position until &#8216;_X&#8217; in Interactive Console 
+is typed. Then, script execution goes further.</p>
+</dd></dl>
+
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="multitesting.html" title="2. Multitesting"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="adv_concepts.html" title="5. Advanced Concepts"
+             >previous</a> |</li>
+        <li><a href="../index.html">Xperior 1.3.0 documentation</a> &raquo;</li>
+          <li><a href="adv_concepts.html" >5. Advanced Concepts</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, noriba GmbH.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

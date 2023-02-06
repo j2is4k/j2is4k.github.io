@@ -1,0 +1,79 @@
+#******************************************************************************
+#*** Name of project : Template generator
+#*** Author          : Jiri Sostok
+#***
+#*** Description:
+#***  
+#***
+#*** Requirements:
+#***  None
+#******************************************************************************
+#
+#    History:
+#    $Log: template_generator.i3e $
+#
+#     /main/1    1 Mar 2010 12:43:55   sostok
+#  -> new
+#**************************************************************************end*
+
+
+template = '''\
+#******************************************************************************
+#*** Name of project : 
+#*** Author          : 
+#***
+#*** Description:
+#***  [enter description here]
+#***  
+#***  
+#***  Test takes about [x] minutes.
+#***
+#***  Multitesting conform.
+#***
+#*** Requirements:
+#***  [enter used devices here]
+#******************************************************************************
+#
+#    History:
+#    $Log: file_name.i3e $
+#
+#     /main/1    1 Mar 2010 12:43:55   sostok
+#  -> new
+#**************************************************************************end*
+
+
+## classes definitions ##------------------------------------------------------
+##-----------------------------------------------------------------------------
+
+
+## function definitions ##-----------------------------------------------------
+##-----------------------------------------------------------------------------
+
+
+## measurement ##--------------------------------------------------------------
+err = lambda: False
+# put your code here
+
+
+## conclusion:
+print '\\n\\nTEST RESULT:\\n'
+if not err():
+    print 'PASSED'
+else:
+    print 'FAILED\\nFollowing problems:'
+    for entry in err():
+        print entry, '\\n'
+##-----------------------------------------------------------------------------
+'''
+
+
+## function definitions ##-----------------------------------------------------
+def create_template():
+    _int.editor.do_new()
+    _int.editor.get_active_book().AppendText(template)
+    
+##-----------------------------------------------------------------------------
+
+
+if __name__ == '__forum__':
+    _int.vcp.post_calls(create_template)

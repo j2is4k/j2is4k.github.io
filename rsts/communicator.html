@@ -1,0 +1,634 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>3. Communicator &mdash; Xperior 1.3.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.3.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="top" title="Xperior 1.3.0 documentation" href="../index.html" />
+    <link rel="next" title="4. Reporter" href="reporter.html" />
+    <link rel="prev" title="2. Getting familiar" href="application.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="reporter.html" title="4. Reporter"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="application.html" title="2. Getting familiar"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Xperior 1.3.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">3. Communicator</a><ul>
+<li><a class="reference internal" href="#general-description">3.1. General description</a><ul>
+<li><a class="reference internal" href="#editor">3.1.1. Editor</a></li>
+<li><a class="reference internal" href="#shell">3.1.2. Shell</a></li>
+<li><a class="reference internal" href="#namespace-tree">3.1.3. Namespace Tree</a></li>
+<li><a class="reference internal" href="#explorer">3.1.4. Explorer</a></li>
+<li><a class="reference internal" href="#protocol-trace">3.1.5. Protocol Trace</a></li>
+<li><a class="reference internal" href="#logging-trace">3.1.6. Logging Trace</a></li>
+<li><a class="reference internal" href="#vertical-control-panel">3.1.7. Vertical Control Panel</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#instrument-configuration">3.2. Instrument Configuration</a><ul>
+<li><a class="reference internal" href="#add-and-remove-instruments">3.2.1. Add and Remove Instruments</a></li>
+<li><a class="reference internal" href="#interface-asrl-visa">3.2.2. Interface ASRL (VISA)</a></li>
+<li><a class="reference internal" href="#interface-gpib-visa">3.2.3. Interface GPIB (VISA)</a></li>
+<li><a class="reference internal" href="#interface-rsnrp-visa">3.2.4. Interface RSNRP (VISA)</a></li>
+<li><a class="reference internal" href="#interface-tcpip-socket-visa">3.2.5. Interface TCPIP_SOCKET (VISA)</a></li>
+<li><a class="reference internal" href="#interface-tcpip-vxi-11-visa">3.2.6. Interface TCPIP_VXI_11 (VISA)</a></li>
+<li><a class="reference internal" href="#interface-telnet">3.2.7. Interface TELNET</a></li>
+<li><a class="reference internal" href="#interface-usb-visa">3.2.8. Interface USB (VISA)</a></li>
+<li><a class="reference internal" href="#export-and-import-instrument-configuration">3.2.9. Export and Import instrument configuration</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#soap-devices-configuration">3.3. SOAP Devices Configuration</a></li>
+<li><a class="reference internal" href="#protocol-trace-configuration">3.4. Protocol Trace Configuration</a><ul>
+<li><a class="reference internal" href="#switching-on-off-device-logging">3.4.1. Switching On/Off Device logging</a></li>
+<li><a class="reference internal" href="#absolute-vs-relative-timestamps-logging">3.4.2. Absolute vs Relative timestamps logging</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#writing-down-a-script">3.5. Writing down a script</a><ul>
+<li><a class="reference internal" href="#script-template">3.5.1. Script template</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#xperior-library-xlib">3.6. Xperior library (xlib)</a><ul>
+<li><a class="reference internal" href="#plot-a-graph">3.6.1. Plot a graph</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#macros">3.7. Macros</a></li>
+<li><a class="reference internal" href="#debugger">3.8. Debugger</a><ul>
+<li><a class="reference internal" href="#features">3.8.1. Features</a></li>
+<li><a class="reference internal" href="#how-to-setup-the-debugger">3.8.2. How to setup the debugger</a></li>
+<li><a class="reference internal" href="#restrictions">3.8.3. Restrictions</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#communicator-light">3.9. Communicator Light</a><ul>
+<li><a class="reference internal" href="#limitations">3.9.1. Limitations</a></li>
+<li><a class="reference internal" href="#how-to-build">3.9.2. How to build</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="application.html"
+                        title="previous chapter">2. Getting familiar</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="reporter.html"
+                        title="next chapter">4. Reporter</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/rsts/communicator.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="communicator">
+<span id="id1"></span><h1>3. Communicator<a class="headerlink" href="#communicator" title="Permalink to this headline">¶</a></h1>
+<div class="sidebar">
+<p class="first sidebar-title">Summary</p>
+<table class="last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Info:</th><td class="field-body">Communicator, a control part encapsulating the code editor, interactive shell and related addons.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Target:</th><td class="field-body">users</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Status:</th><td class="field-body">mature</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p id="index-0">Communicator is the combination of <a class="reference internal" href="#editor"><em>GUI Editor</em></a>, <em>special libraries</em> (graphs ploting, text frames, SOAP network procedures, instruments communication (ASRL, GPIB, TCPIP, TELNET, USB, etc.)) and <strong>built-in Python interpreter</strong> offering wide spectrum of very useful modules.</p>
+<p>Also enables changes of <a class="reference internal" href="application.html#internal-access"><em>internal attributes</em></a> of Xperior application. Defining own functions or modules and importing them on start or store them as <a class="reference internal" href="#macros"><em>Macros</em></a>, makes the application to suit to almost anybody. Developing phase can be improved by using the <a class="reference internal" href="#debugger"><em>Debugger</em></a>. Console mode called <a class="reference internal" href="#com-light"><em>Communicator Light</em></a> compiled to an executable file can be used for special non-GUI embedded cases.</p>
+<hr class="docutils" />
+<div class="section" id="general-description">
+<span id="com-general"></span><h2>3.1. General description<a class="headerlink" href="#general-description" title="Permalink to this headline">¶</a></h2>
+<p>Functionality and GUI items description.</p>
+<div class="section" id="editor">
+<span id="id2"></span><h3>3.1.1. Editor<a class="headerlink" href="#editor" title="Permalink to this headline">¶</a></h3>
+<p>Is a notebook containing pages, where a page represents a source code (file) which is a runnable script in Python interpreter. This source code shares the same namespace with <a class="reference internal" href="#shell">shell</a> console. Don&#8217;t miss useful tips in the chapter <a class="reference internal" href="#script-temp"><em>Writing down a script</em></a>.</p>
+<p>Shortcut to Commands editor is <tt class="kbd docutils literal"><span class="pre">Alt</span> <span class="pre">+</span> <span class="pre">F1</span></tt>.</p>
+</div>
+<div class="section" id="shell">
+<span id="id3"></span><h3>3.1.2. Shell<a class="headerlink" href="#shell" title="Permalink to this headline">¶</a></h3>
+<p>Command line Interactive Python console (Shell) shares the same namespace with <a class="reference internal" href="#editor">editor</a>. To learn more about Python syntaxes, programming strategies and descriptions of huge number of modules, see <a class="reference internal" href="../index.html#documents-and-links"><em>Other Documents and Links</em></a>.</p>
+<p>Shortcut to Shell is <tt class="kbd docutils literal"><span class="pre">Alt</span> <span class="pre">+</span> <span class="pre">F2</span></tt>.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Command entered to the <a class="reference internal" href="#shell">shell</a> is executed in the main thread, therefore long term operation, infinitive loops, deep recursions, etc. lead to application freeze.</p>
+</div>
+<p><em>Based on Patrick K. O&#8217;Brien&#8217;s &#8220;shell.py&#8221; module.</em> <em>VISA implementation is based on Torsten Bronger&#8217;s &#8220;visa.py&#8221; and &#8220;vpp43.py&#8221; module.</em></p>
+</div>
+<div class="section" id="namespace-tree">
+<h3>3.1.3. Namespace Tree<a class="headerlink" href="#namespace-tree" title="Permalink to this headline">¶</a></h3>
+<p>Displays namespace structure in expandable tree form. Entry point is <tt class="docutils literal"><span class="pre">locals()</span></tt>, a dictionary listing all namespace objects by its name. Further on every such object can contain further (nested) objects in a tree form. Right panel contains additional information about selected item:</p>
+<ul class="simple">
+<li>complete namespace path</li>
+<li>type of object</li>
+<li>value of object</li>
+<li>docstring</li>
+<li>source code</li>
+</ul>
+<p>Double left clicking on tree item will print the complete namespace path in <a class="reference internal" href="#shell">shell</a>.</p>
+<p><em>Based on Patrick K. O&#8217;Brien&#8217;s &#8220;filling.py&#8221; module.</em></p>
+<div class="figure align-left" style="width: 100%">
+<img alt="../_images/XPERIOR-Communicator-namespace_tree.jpg" src="../_images/XPERIOR-Communicator-namespace_tree.jpg" />
+<p class="caption">Figure: Example of Namespace Tree</p>
+</div>
+</div>
+<div class="section" id="explorer">
+<h3>3.1.4. Explorer<a class="headerlink" href="#explorer" title="Permalink to this headline">¶</a></h3>
+<p>File-system Explorer. It allows to open files in <a class="reference internal" href="#editor">editor</a> comfortably (with <tt class="docutils literal"><span class="pre">LeftDClick</span></tt> or via <tt class="docutils literal"><span class="pre">RightClick</span> <span class="pre">Menu</span></tt>) or start the file with system call.</p>
+<div class="figure align-left" style="width: 100%">
+<img alt="../_images/XPERIOR-Communicator-explorer.jpg" src="../_images/XPERIOR-Communicator-explorer.jpg" />
+<p class="caption">Figure: Explorer</p>
+</div>
+</div>
+<div class="section" id="protocol-trace">
+<span id="ptc-trace"></span><h3>3.1.5. Protocol Trace<a class="headerlink" href="#protocol-trace" title="Permalink to this headline">¶</a></h3>
+<p>Captures the standard output of the script and is a target for the <a class="reference internal" href="application.html#logger-setup"><em>script logger</em></a> and <a class="reference internal" href="#visa-config"><em>VISA</em></a> and <a class="reference internal" href="#soap-config"><em>SOAP</em></a> communication. Protocol trace is a standard text field, with additional methods for buffering input strings and for limiting maximal number of displayed lines.</p>
+<p>Script logger logs in format (see how to setup the <a class="reference internal" href="application.html#logger-setup"><em>script logger</em></a>):</p>
+<div class="highlight-python"><pre>hh:mm:ss.mis [LEVEL   ] (  thread:module~function:line) message</pre>
+</div>
+<p>VISA and SOAP communication is logged in format:</p>
+<div class="highlight-python"><pre>hh:mm:ss.mis        device_name:             request
+hh:mm:ss.mis        device_name:  dddd.d ms  response</pre>
+</div>
+<div class="figure align-left" style="width: 100%">
+<img alt="../_images/XPERIOR-Communicator-protocol_trace.jpg" src="../_images/XPERIOR-Communicator-protocol_trace.jpg" />
+<p class="caption">Figure: Example of Procotol Trace output</p>
+</div>
+</div>
+<div class="section" id="logging-trace">
+<span id="id4"></span><h3>3.1.6. Logging Trace<a class="headerlink" href="#logging-trace" title="Permalink to this headline">¶</a></h3>
+<p>Displaying logger informing the user about what the application is doing, for instance how long the script ran, which arguments are passed to VISA device instance, showing syntax error traceback, etc. Is a target for <a class="reference internal" href="application.html#logger-setup"><em>root</em></a> and <a class="reference internal" href="application.html#logger-setup"><em>fapp logger</em></a></p>
+<p>Logger logs in format:</p>
+<blockquote>
+<div>hh:mm:ss.mis [LEVEL    ] (        logger-thread:module:line) message</div></blockquote>
+<div class="figure align-left" style="width: 100%">
+<img alt="../_images/XPERIOR-Communicator-logging_trace.jpg" src="../_images/XPERIOR-Communicator-logging_trace.jpg" />
+<p class="caption">Figure: Example of Logging Trace output</p>
+</div>
+</div>
+<div class="section" id="vertical-control-panel">
+<h3>3.1.7. Vertical Control Panel<a class="headerlink" href="#vertical-control-panel" title="Permalink to this headline">¶</a></h3>
+<p>Description of control units</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="11%" />
+<col width="9%" />
+<col width="81%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Widget Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><em>Run</em></td>
+<td>Button</td>
+<td><tt class="kbd docutils literal"><span class="pre">Ctrl</span> <span class="pre">+</span> <span class="pre">R</span></tt> - starts a new thread with parsing content of Commands Editor as a source to python&#8217;s interpreter.</td>
+</tr>
+<tr class="row-odd"><td><em>Debug Run</em></td>
+<td>Button</td>
+<td><tt class="kbd docutils literal"><span class="pre">Ctrl</span> <span class="pre">+</span> <span class="pre">D</span></tt> - prepares the script as debuggee server to wait for external debugger. Details here.</td>
+</tr>
+<tr class="row-even"><td><em>Pause</em></td>
+<td>Button</td>
+<td><tt class="kbd docutils literal"><span class="pre">Ctrl</span> <span class="pre">+</span> <span class="pre">P</span></tt> - pauses/unpauses a script started by Run button.</td>
+</tr>
+<tr class="row-odd"><td><em>Force Stop</em></td>
+<td>Button</td>
+<td><tt class="kbd docutils literal"><span class="pre">Ctrl</span> <span class="pre">+</span> <span class="pre">T</span></tt> - terminates running script.</td>
+</tr>
+<tr class="row-even"><td><em>Logging Type</em></td>
+<td>Radio Button</td>
+<td>defines which kind of logging should be used. Recommended is &#8220;both&#8221;.</td>
+</tr>
+<tr class="row-odd"><td><em>Max Screen Lines</em></td>
+<td>Text Control</td>
+<td>parameter defines maximal displayed number of lines in Protocol Trace.</td>
+</tr>
+<tr class="row-even"><td><em>Window Split</em></td>
+<td>Radio Button</td>
+<td>specifies the sash orientation between EditorAndShell Panel and Protocols Panel.</td>
+</tr>
+<tr class="row-odd"><td><em>Instrument</em></td>
+<td>Choice Control</td>
+<td>lists all active instruments. Click on &lt;new&gt; for on-fly instrument declaration. You may want to use this object in connection with Macros.</td>
+</tr>
+<tr class="row-even"><td><em>Reload Devices</em></td>
+<td>Button reloads</td>
+<td>(reinstatiate) already defined VISA and SOAP objects, see VISA and SOAP configuration.</td>
+</tr>
+<tr class="row-odd"><td><em>Macro Setup</em></td>
+<td>Button controls</td>
+<td>configurable buttons. Separately discussed in <a class="reference internal" href="#macros"><em>Macros</em></a>.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="instrument-configuration">
+<span id="visa-config"></span><h2>3.2. Instrument Configuration<a class="headerlink" href="#instrument-configuration" title="Permalink to this headline">¶</a></h2>
+<p>Before addressing any instrument, it needs to be added to the <strong>Instruments Configuration</strong>. After starting the Xperior Application choose <em class="menuselection">Edit -&gt; Instrument Configuration</em>. This will bring up the Instruments Configuration screen illustrated in figure below. To apply changes for VISA devices, you don&#8217;t need to restart XPERIOR, just save the modified file and press <tt class="docutils literal"><span class="pre">Reload</span> <span class="pre">Devices</span></tt> button.</p>
+<div class="figure align-left" style="width: 100%">
+<img alt="../_images/instrument_ini_example1.jpg" src="../_images/instrument_ini_example1.jpg" />
+<p class="caption">Figure: Instrument Configuration</p>
+</div>
+<p>List of devices displays all configurations and the connection status. Three states are defined:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>enabled and active</li>
+<li>enabled and inactive</li>
+<li>disabled</li>
+</ol>
+</div></blockquote>
+<p>In the column <em>Enabled</em>, you will find green checkmarks or red crosses. By clicking on this column, you can change a checkmark to a cross and vice versa and thus enabling or disabling the use of this instrument.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Every time the List of devices is reloaded, the Xperior Application will try to establish a connection to all enabled instruments and then lists if the connection is active in the column <em>Connection</em>. You can speed up this process by disabling all the instruments known to be switched off or not connected. An instrument will be accessible in scripts only if it is enabled and its <em>Connection</em> column marks it as active. To update the connection status, press <tt class="docutils literal"><span class="pre">Save</span> <span class="pre">&amp;</span> <span class="pre">Reload</span></tt> button.</p>
+</div>
+<p>You can <em>Insert</em> and <em>Remove Instrument</em> definitions with appropriate buttons or keyboard keys.</p>
+<p><strong>Parameters Editor</strong> enables configuration for selected device. Every <em>Interface Type</em> contains different set of parameters. Notice the difference e.g. for <tt class="docutils literal"><span class="pre">TCPIP_VXI_11</span></tt> and <tt class="docutils literal"><span class="pre">TCPIP_SOCKET</span></tt>. On the left side are mandatory parameters, on the right optional <em>VI Attributes</em>. Specified VI Attribute (not &lt;default&gt;) has precedence.</p>
+<div class="section" id="add-and-remove-instruments">
+<h3>3.2.1. Add and Remove Instruments<a class="headerlink" href="#add-and-remove-instruments" title="Permalink to this headline">¶</a></h3>
+<p>On the <strong>Instruments Configuration</strong> screen you will see a list of <em>Instruments</em>. By clicking on any of the list entries, you can edit the instruments configuration like VISA connection type, host name or timeout. By clicking on the button <tt class="docutils literal"><span class="pre">Insert</span></tt> or pressing the <tt class="docutils literal"><span class="pre">Insert</span></tt> key, you add a new, empty list entry. This new entry will automatically be selected, so you can start editing it.</p>
+<p>The following Settings can be made:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="15%" />
+<col width="85%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Option</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Interface Type</td>
+<td>type of physical connection like LAN, GPIB or USB</td>
+</tr>
+<tr class="row-odd"><td>Device Name</td>
+<td>name that will be used in scripts to identify the instrument; the termination chars can be left blank for the default setting</td>
+</tr>
+<tr class="row-even"><td>Timeout</td>
+<td>time in seconds that the Xperior Application waits for a response from an instrument before showing a timeout error</td>
+</tr>
+<tr class="row-odd"><td>Delay</td>
+<td>time in milliseconds after each write command to the instrument</td>
+</tr>
+<tr class="row-even"><td>Settings on the left side</td>
+<td>specific for the selected Interface Type and configured connection; they will be addressed separately in the following subchapters</td>
+</tr>
+<tr class="row-odd"><td>Settings on the right side</td>
+<td>VISA attributes that should only be configured by advanced users; for more information on these attributes please consult the VISA documentation</td>
+</tr>
+</tbody>
+</table>
+<p>Alternatively, you can add an instrument for just one session by using the Instrument Dropdown menu in the Vertical Control Panel on the left. Just open the <em class="menuselection">Dropdown menu-&gt;choose &lt;new&gt;</em>. This will open up the <strong>Instrument Connection Configuration</strong> window. Instruments added through this dialog will not be saved. After closing and restarting the Xperior Application, those instruments will no longer be available.</p>
+<div class="figure align-left" style="width: 100%">
+<img alt="../_images/XPERIOR-Communicator-macro-setup+vcp.jpg" src="../_images/XPERIOR-Communicator-macro-setup+vcp.jpg" />
+<p class="caption">Figure: Vertical Control Panel</p>
+</div>
+<div class="figure align-left" style="width: 100%">
+<img alt="../_images/instrument_ini_example2.png" src="../_images/instrument_ini_example2.png" />
+<p class="caption">Figure: Instrument Connection Configuration</p>
+</div>
+<p>In the <strong>Instrument Connection Configuration</strong> window (&lt;new&gt;), the following attributes can be changed:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="26%" />
+<col width="74%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Option</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Alias</td>
+<td>equals the Device Name on the Instruments Configuration screen</td>
+</tr>
+<tr class="row-odd"><td>Device Type</td>
+<td>equals the Interface Type</td>
+</tr>
+<tr class="row-even"><td>The Number</td>
+<td>used in the case of multiple adapters on the PC and can be 0 in most cases</td>
+</tr>
+<tr class="row-odd"><td>Timeout and Delay</td>
+<td>correspond to the attributes of the same name on the Instruments Configuration screen</td>
+</tr>
+<tr class="row-even"><td>The Identifier(IP or Hostname)</td>
+<td>is specific for the selected Device Type and will become a part of the VISA RSC field</td>
+</tr>
+</tbody>
+</table>
+<p>Advanced users who are familiar with VISA address strings can directly edit the <tt class="docutils literal"><span class="pre">VISA</span> <span class="pre">RSC</span> <span class="pre">field</span></tt>.</p>
+</div>
+<div class="section" id="interface-asrl-visa">
+<h3>3.2.2. Interface ASRL (VISA)<a class="headerlink" href="#interface-asrl-visa" title="Permalink to this headline">¶</a></h3>
+<p>To control an Instrument via the serial port, choose Interface Type ASRL. There you have to configure the resource name (COM1, COM2 etc), the baud rate, number of data bits, number of stop bits and the parity check method to use. You cannot configure a serial connection in the <strong>Instrument Connection Configuration</strong> window.</p>
+</div>
+<div class="section" id="interface-gpib-visa">
+<h3>3.2.3. Interface GPIB (VISA)<a class="headerlink" href="#interface-gpib-visa" title="Permalink to this headline">¶</a></h3>
+<p>To configure General Purpose Interface Bus (GPIB) connection choose <em class="menuselection">Interface-&gt;Device Type GPIB</em>.</p>
+<ul class="simple">
+<li><strong>Instruments Configuration</strong> screen: here you have to configure the primary address of the instrument. A secondary address can also be specified, if certain device requires it.</li>
+<li><strong>Instrument Connection Configuration</strong> window: enter the primary GPIB address as Identifier. If you wish to configure a secondary address, add it to the Identifier after the primary address separated by two colons <tt class="docutils literal"><span class="pre">::</span></tt>.</li>
+</ul>
+</div>
+<div class="section" id="interface-rsnrp-visa">
+<h3>3.2.4. Interface RSNRP (VISA)<a class="headerlink" href="#interface-rsnrp-visa" title="Permalink to this headline">¶</a></h3>
+<p>To control RSNRP from a PC, you need to install the NRP Toolkit which is supplied with any NRP device. You also need the NRP-NI-VISA Passport. After connecting the NRP device to your PC, run VISA interactive control (from the <em class="menuselection">StartMenu-&gt;Programs-&gt;National Instruments-&gt;VISA-&gt;VISA Interactive Control</em>). It will list all currently connected instruments. There, you&#8217;ll find a VISA address string in the syntax:</p>
+<div class="highlight-python"><pre>RSNRP::&lt;model code&gt;::&lt;serial number&gt;::INSTR</pre>
+</div>
+<ul class="simple">
+<li><strong>Instruments Configuration</strong> screen: insert model code and serial number into the respective fields.</li>
+<li><strong>Instrument Connection Configuration</strong> window: for the connection to work, the VISA RSC field must contain the same string as is displayed in VISA Interactive Control. So you need to write <tt class="docutils literal"><span class="pre">&lt;model</span> <span class="pre">code&gt;::&lt;serial</span> <span class="pre">number&gt;</span></tt> as Identifier. The <em>Identity</em> field will be ignored. Finally, you will have to edit the field VISA RSC manually to remove the 0 of RSNRP0.</li>
+</ul>
+</div>
+<div class="section" id="interface-tcpip-socket-visa">
+<h3>3.2.5. Interface TCPIP_SOCKET (VISA)<a class="headerlink" href="#interface-tcpip-socket-visa" title="Permalink to this headline">¶</a></h3>
+<p>Generally, you should use the <em>VXI LAN interface</em> to configure a connection via LAN. But in some cases you might want to configure the connection more specifically. For those situations, you can use socket communication, also known as <em>Raw Ethernet</em> communication. Choose <em class="menuselection">Interface-&gt;Device Type-&gt;TCPIP_SOCKET</em>.</p>
+<ul class="simple">
+<li><strong>Instruments Configuration</strong> screen: like with the TCPIP_VXI_11 Interface Type, the host name can be the network device name or the IP address of the instrument. The port number is the number of the network port on the instrument that you are connecting to.</li>
+<li><strong>Instrument Connection Configuration</strong> window: time same rules applies.</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This configuration lacks some important trigger and hand shaking functions. It is recommended to use the VXI LAN interface instead.</p>
+</div>
+</div>
+<div class="section" id="interface-tcpip-vxi-11-visa">
+<h3>3.2.6. Interface TCPIP_VXI_11 (VISA)<a class="headerlink" href="#interface-tcpip-vxi-11-visa" title="Permalink to this headline">¶</a></h3>
+<p>To address an instrument connected by LAN you should usually choose <em class="menuselection">Interface-&gt;Device Type-&gt;TCPIP_VXI_11</em>. Here, you have to configure the following attributes:</p>
+<ul class="simple">
+<li><strong>Instruments Configuration</strong> screen: the host name can be the instrument network device name or the IP address. The Identity is not mandatory unless there is more than one VISA entity running on the same instrument. In that case, inst0 would be the first VISA entity, inst1 the second etc.</li>
+<li><strong>Instrument Connection Configuration</strong> window: the Identifier equals the host name and can be network device name or IP address. The Identity, like above, is not mandatory unless there is more than one VISA entity running on the same instrument. In that case, inst0 would be the first VISA entity, inst1 the second etc.</li>
+</ul>
+</div>
+<div class="section" id="interface-telnet">
+<h3>3.2.7. Interface TELNET<a class="headerlink" href="#interface-telnet" title="Permalink to this headline">¶</a></h3>
+<p>Unlike the other interfaces, telnet does not use the VISA interface but establishes a simple TCP connection. It&#8217;s configuration uses the same parameters as TCPIP socket, but the VISA attributes will not be available. You cannot configure a telnet connection in the <strong>Instrument Connection Configuration</strong> window.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This configuration lacks some important trigger and hand shaking functions. It is recommended to use the VXI LAN interface instead.</p>
+</div>
+</div>
+<div class="section" id="interface-usb-visa">
+<h3>3.2.8. Interface USB (VISA)<a class="headerlink" href="#interface-usb-visa" title="Permalink to this headline">¶</a></h3>
+<p>To connect an instrument via USB, you need to know the <em>vendor id*(VID), *product id*(PID) and *serial number</em>. If you have NI VISA installed, it will automatically detect the instrument once it has been connected to the computer via USB. To get the required parameters, run VISA interactive control (<em class="menuselection">StartMenu-&gt;Programs-&gt;National Instruments-&gt;VISA-&gt;VISA Interactive Control</em>). It will list all currently connected instruments. There, you&#8217;ll find a VISA address string in the syntax:</p>
+<blockquote>
+<div>USB0::&lt;vendor id&gt;::&lt;productid&gt;::&lt;serial number&gt;::INSTR</div></blockquote>
+<ul class="simple">
+<li><strong>Instruments Configuration</strong> screen: enter the vendor id(VID), product id(PID) and serial number into the respective fields.</li>
+<li><strong>Instrument Connection Configuration</strong> window: for the connection to work, the VISA RSC field must contain the same string as is displayed in VISA Interactive Control. So you need to write &lt;vendor id&gt;::&lt;productid&gt;::&lt;serial number&gt; as Identifier. The Identity field will be ignored.</li>
+</ul>
+</div>
+<div class="section" id="export-and-import-instrument-configuration">
+<h3>3.2.9. Export and Import instrument configuration<a class="headerlink" href="#export-and-import-instrument-configuration" title="Permalink to this headline">¶</a></h3>
+<p>Selecting other device from <em>List of devices</em> saves the changes for current device virtually. All changes are first stored into the file with <tt class="docutils literal"><span class="pre">Save</span> <span class="pre">&amp;</span> <span class="pre">Reload</span></tt> button. <tt class="docutils literal"><span class="pre">Close</span></tt> will discard all virtual changes. <tt class="docutils literal"><span class="pre">Import</span></tt> and <tt class="docutils literal"><span class="pre">Export</span></tt> buttons realise corresponding functionality.</p>
+</div>
+</div>
+<div class="section" id="soap-devices-configuration">
+<span id="soap-config"></span><h2>3.3. SOAP Devices Configuration<a class="headerlink" href="#soap-devices-configuration" title="Permalink to this headline">¶</a></h2>
+<p>To enter the configuration panel, go to <em class="menuselection">Edit-&gt;SOAP Configuration</em>, illustration in figure below. Panel elements general description is the same as in previous paragraph. To apply changes for SOAP devices, you don&#8217;t need to restart XPERIOR, just save the modified file, press <tt class="docutils literal"><span class="pre">Reload</span> <span class="pre">Devices</span></tt> button.</p>
+<div class="figure align-left" style="width: 100%">
+<img alt="../_images/soap_py_example1.jpg" src="../_images/soap_py_example1.jpg" />
+<p class="caption">Figure: SOAP Devices Configuration</p>
+</div>
+</div>
+<div class="section" id="protocol-trace-configuration">
+<h2>3.4. Protocol Trace Configuration<a class="headerlink" href="#protocol-trace-configuration" title="Permalink to this headline">¶</a></h2>
+<p>Communicator&#8217;s relevant settings such last opened file, logging type, sash position, editor zoom, etc. are stored in windows registry. Values are overwritten/updated when closing the XPERIOR.</p>
+<div class="section" id="switching-on-off-device-logging">
+<h3>3.4.1. Switching On/Off Device logging<a class="headerlink" href="#switching-on-off-device-logging" title="Permalink to this headline">¶</a></h3>
+<p>Introducing protocol logging control for SOAP and Instrument devices: Implicitly protocol logging is enabled. You can turn it off these ways:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">_int</span><span class="o">.</span><span class="n">use_protocol</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span> <span class="c">#to disable logging for every instance</span>
+<span class="p">[</span><span class="n">device</span><span class="p">]</span><span class="o">.</span><span class="n">use_protocol</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span> <span class="c">#to disable logging only for specified device</span>
+</pre></div>
+</div>
+<p>First option has higher priority. The protocol logging can be activated again by passing True argument or by restarting the XPERIOR. In <a class="reference internal" href="#shell">shell</a> the logging is always active.</p>
+</div>
+<div class="section" id="absolute-vs-relative-timestamps-logging">
+<h3>3.4.2. Absolute vs Relative timestamps logging<a class="headerlink" href="#absolute-vs-relative-timestamps-logging" title="Permalink to this headline">¶</a></h3>
+<p>Timestamps related with logging of VISA &amp; SOAP devices can now be displayed in relative mode - timestamps displaying elapsed time since script start, or absolute mode - displaying current PC clock time. Use respective function calls:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">_int</span><span class="o">.</span><span class="n">vcp</span><span class="o">.</span><span class="n">use_absolute_stamp</span><span class="p">()</span>
+<span class="n">_int</span><span class="o">.</span><span class="n">vcp</span><span class="o">.</span><span class="n">use_relative_stamp</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="writing-down-a-script">
+<span id="script-temp"></span><h2>3.5. Writing down a script<a class="headerlink" href="#writing-down-a-script" title="Permalink to this headline">¶</a></h2>
+<p>If you&#8217;ve never programmed in python, read the tutorial first (see <a class="reference internal" href="../index.html#documents-and-links"><em>Other Documents and Links</em></a>). Next step is to examine the VISA devices communication. Make sure, you&#8217;ve configured everything correctly and start with simple commands such: <tt class="docutils literal"><span class="pre">[device_allias].ask('*opt?')</span></tt>. You can than extend the <a class="reference internal" href="#shell">shell</a> commands to a simple script, storing the result of <em>ask() method</em> to some variable and manipulating this variable. The best way of learning is to read the code written by your colleagues. Don&#8217;t forget that your code will be also read!</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">It is important that we synchronize with using certain style when writing the script in Python. To increase readability and clarity please use Style Guide for Python.</p>
+</div>
+<div class="section" id="script-template">
+<h3>3.5.1. Script template<a class="headerlink" href="#script-template" title="Permalink to this headline">¶</a></h3>
+<p>If you want to use other XPERIOR feature, such as <a class="reference internal" href="multitesting.html#multitest"><em>Multitesting</em></a> or <a class="reference internal" href="reporter.html#reporter"><em>Reporter</em></a>, you should use following script template. Using template of header part ensures proper parsing of contained information. The same is valid for conslusion part.</p>
+<p>Script template can be downloaded <a class="reference download internal" href="../_downloads/template_generator.i3e"><tt class="xref download docutils literal"><span class="pre">../../../addons/template_generator.i3e</span></tt></a>. Just start the script in the <a class="reference internal" href="#editor">editor</a>.</p>
+<div class="figure align-left" style="width: 100%">
+<img alt="../_images/XPERIOR-Communicator-ScriptTemplate.jpg" src="../_images/XPERIOR-Communicator-ScriptTemplate.jpg" />
+<p class="caption">Figure: Script template</p>
+</div>
+</div>
+</div>
+<div class="section" id="xperior-library-xlib">
+<h2>3.6. Xperior library (xlib)<a class="headerlink" href="#xperior-library-xlib" title="Permalink to this headline">¶</a></h2>
+<p>XPERIOR library is concept of additional configurations, features and services. Separately discussed in page <a class="reference internal" href="xlib.html#xperior-lib"><em>Xperior Library</em></a>.</p>
+<div class="section" id="plot-a-graph">
+<h3>3.6.1. Plot a graph<a class="headerlink" href="#plot-a-graph" title="Permalink to this headline">¶</a></h3>
+<p>Part of <a class="reference internal" href="xlib.html#xperior-lib"><em>Xperior Library</em></a> is also a plot library. Plot of graphs is easy and even more if you are familiar with MATLAB. For detailed information refer to <a class="reference external" href="http://matplotlib.org/">matplotlib</a>. You can use plot function defined in <a class="reference internal" href="xlib.html#xperior-lib"><em>xlib</em></a>, shell: <tt class="docutils literal"><span class="pre">xlib.plot()</span></tt>. Here are some graph examples with source files locations:</p>
+<ul class="simple">
+<li>Location: <tt class="xref download docutils literal"><span class="pre">../../../source/examples/matplotlib_graph/3d_sphere.i3e</span></tt></li>
+<li>Location: <tt class="xref download docutils literal"><span class="pre">../../../source/examples/matplotlib_graph/3d_f&amp;t_allocation.i3e</span></tt></li>
+<li>Location: <tt class="xref download docutils literal"><span class="pre">../../../source/examples/matplotlib_graph/coh+csd.i3e</span></tt></li>
+<li>Location: <tt class="xref download docutils literal"><span class="pre">../../../source/examples/matplotlib_graph/noise.i3e</span></tt></li>
+<li>Location: <tt class="xref download docutils literal"><span class="pre">../../../source/examples/matplotlib_graph/errbar.i3e</span></tt></li>
+<li>Location: <tt class="xref download docutils literal"><span class="pre">../../../source/examples/matplotlib_graph/histogram.i3e</span></tt></li>
+</ul>
+<img alt="Example 3D 1 - Sphere" src="../_images/XPERIOR-Communicator-3d_sphere.jpg" style="width: 30%;" />
+<img alt="Example 3D 2 - Frequency-time allocation" src="../_images/XPERIOR-Communicator-3d_f&amp;t_allocation.jpg" style="width: 30%;" />
+<img alt="Example 4 - Coherence &amp; cross spectral density of two signals" src="../_images/XPERIOR-Communicator-plot-cod+csd.jpg" style="width: 30%;" />
+<img alt="Example 1 - Gaussian noise" src="../_images/XPERIOR-Communicator-plot-noise.jpg" style="width: 30%;" />
+<img alt="Example 2 - Errorbar" src="../_images/XPERIOR-Communicator-plot-errbar.jpg" style="width: 30%;" />
+<img alt="Example 3 - Histogram" src="../_images/XPERIOR-Communicator-plot-histogram.jpg" style="width: 30%;" />
+</div>
+</div>
+<div class="section" id="macros">
+<span id="id5"></span><h2>3.7. Macros<a class="headerlink" href="#macros" title="Permalink to this headline">¶</a></h2>
+<p>Are user-defined procedures in form of python code. For a new macro definition, press <tt class="docutils literal"><span class="pre">Macro</span> <span class="pre">Setup</span></tt> button, as shown in the figure. All <strong>Macro</strong> declarations are stored locally under user&#8217;s application path.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">It is a short script started in <a class="reference internal" href="#shell">shell</a> running in the main thread; therefore consider time-length of such procedure.</p>
+</div>
+<p>You can also put instrument devices to the macro definition. Such devices are then hard-coded, statically defined. To create a single dynamic device, use <em>_device</em> string in your macro&#8217;s source code. Depending on a selection in the <strong>Instrument choice</strong> control, that device will be used for communication.</p>
+<p>Macro is started with mouse click on associated button with the standard output redirected to <a class="reference internal" href="#shell">shell</a>. Macro can&#8217;t be part of an automated script.</p>
+<div class="figure align-left" style="width: 100%">
+<img alt="../_images/XPERIOR-Communicator-macro-setup.jpg" src="../_images/XPERIOR-Communicator-macro-setup.jpg" />
+<p class="caption">Figure: Macro Setup - environment variables example</p>
+</div>
+</div>
+<div class="section" id="debugger">
+<span id="id6"></span><h2>3.8. Debugger<a class="headerlink" href="#debugger" title="Permalink to this headline">¶</a></h2>
+<p>Starting a script with the <tt class="docutils literal"><span class="pre">Debug</span> <span class="pre">Run</span></tt> button prepares the script as a <em>debuggee server</em> to wait for external debugger (<a class="reference external" href="http://winpdb.org/">WinPdb</a>).</p>
+<p>Winpdb is a platform independent GPL Python debugger with support for multiple threads, namespace modification, embedded debugging, encrypted communication and is up to 20 times faster than pdb. <em>Created by Nir Aides, released in term of GNU General Public License version 2 or later.</em></p>
+<div class="figure align-left" style="width: 100%">
+<img alt="../_images/XPERIOR-Communicator-winpdb.jpg" src="../_images/XPERIOR-Communicator-winpdb.jpg" />
+<p class="caption">Figure: Xperior script in WinPdb Debugger</p>
+</div>
+<div class="section" id="features">
+<h3>3.8.1. Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Flow control - breakpoints, conditional breakpoints, next, step into, jump, etc.</li>
+<li>Namespace analysis and modification - includes globals, locals, exceptions</li>
+<li>Multithread support - thread tracking &amp; analysis</li>
+<li>Stack analysis - frames view with detailed information</li>
+<li>Commands Console</li>
+</ul>
+</div>
+<div class="section" id="how-to-setup-the-debugger">
+<h3>3.8.2. How to setup the debugger<a class="headerlink" href="#how-to-setup-the-debugger" title="Permalink to this headline">¶</a></h3>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Xperior needs to be restarted after debugging finishes.</p>
+</div>
+<ol class="arabic simple">
+<li>Start a script with Debug Run button</li>
+<li>In winpdb go to <em class="menuselection">File-&gt;Attach</em></li>
+<li>When prompting for a password, type &#8220;test&#8221;</li>
+<li>In host: localhost, connect to filename: &#8220;communicators editor&#8221;</li>
+<li>You can use the debugger now</li>
+<li>important: restart the Xperior application after you finish debugging. Normal script start will not work otherwise.</li>
+</ol>
+</div>
+<div class="section" id="restrictions">
+<h3>3.8.3. Restrictions<a class="headerlink" href="#restrictions" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>can&#8217;t debug a script containing <em>execute_stop()</em> directive</li>
+<li>can&#8217;t debug a script modifying system trace or profile (<em>sys.settrace</em>, <em>sys.setprofile</em> functions)</li>
+<li>can&#8217;t debug XPERIOR application itself</li>
+</ul>
+</div>
+</div>
+<div class="section" id="communicator-light">
+<span id="com-light"></span><h2>3.9. Communicator Light<a class="headerlink" href="#communicator-light" title="Permalink to this headline">¶</a></h2>
+<p>Is a console mode of Communicator enabling almost identical (see <a class="reference internal" href="#com-limit"><em>Limitations</em></a>) execution of the test scripts. Benefits are compact distribution and no need of Python interpreter installation. Is distributed in form of an <tt class="docutils literal"><span class="pre">*.exe</span></tt> file + additional files. The generated <strong>communicator-light.exe</strong> file itself does not provide all Python modules. This means that some Python test scripts may fail because they need some functionality which is provided by a module which is not compiled into <strong>communicator-light.exe</strong>. To get the needed modules compiled into the executable, the needed python module(s) has/have to be imported within the <em>_modules.py</em> file prior the compilation.</p>
+<p>To change the instrument and SOAP configuration, edit <em>instrument.init</em> and <em>soap.init</em> files respectively. They are located in <tt class="xref download docutils literal"><span class="pre">../../../source/utilities/Communicator/dist</span></tt> directory.</p>
+<div class="section" id="limitations">
+<span id="com-limit"></span><h3>3.9.1. Limitations<a class="headerlink" href="#limitations" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>no GUI; with GUI connected commands</li>
+</ul>
+</div>
+<div class="section" id="how-to-build">
+<h3>3.9.2. How to build<a class="headerlink" href="#how-to-build" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>generate <strong>communicator_light.exe</strong>: <tt class="xref download docutils literal"><span class="pre">../../../source/utilities/Communicator/setup.bat</span></tt></li>
+<li>configure instrument.init and soap.init accordingly</li>
+<li>test it!: <tt class="xref download docutils literal"><span class="pre">../../../source/utilities/Communicator/dist/example.bat</span></tt></li>
+</ul>
+<div class="figure">
+<img alt="../_images/XPERIOR-Communicator_light-help.jpg" src="../_images/XPERIOR-Communicator_light-help.jpg" />
+<p class="caption">Figure: communicator_light.exe</p>
+</div>
+<div class="figure">
+<img alt="../_images/XPERIOR-Communicator_light-example.jpg" src="../_images/XPERIOR-Communicator_light-example.jpg" />
+<p class="caption">Figure: communicator_light.exe - example of communication</p>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="reporter.html" title="4. Reporter"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="application.html" title="2. Getting familiar"
+             >previous</a> |</li>
+        <li><a href="../index.html">Xperior 1.3.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, noriba GmbH.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

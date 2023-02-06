@@ -1,0 +1,293 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>2. Getting familiar &mdash; Xperior 1.3.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.3.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="top" title="Xperior 1.3.0 documentation" href="../index.html" />
+    <link rel="next" title="3. Communicator" href="communicator.html" />
+    <link rel="prev" title="1. Getting started" href="install.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="communicator.html" title="3. Communicator"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="install.html" title="1. Getting started"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Xperior 1.3.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">2. Getting familiar</a><ul>
+<li><a class="reference internal" href="#appearence">2.1. Appearence</a></li>
+<li><a class="reference internal" href="#build-in-python-interpreter">2.2. Build-in Python interpreter</a></li>
+<li><a class="reference internal" href="#error-logging-and-error-report">2.3. Error Logging and Error Report</a></li>
+<li><a class="reference internal" href="#logging-facility">2.4. Logging Facility</a><ul>
+<li><a class="reference internal" href="#how-to-use-a-logger-change-logging-level">2.4.1. How to use a logger, change logging level</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#accessing-internal-objects-on-runtime">2.5. Accessing internal objects on runtime</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="install.html"
+                        title="previous chapter">1. Getting started</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="communicator.html"
+                        title="next chapter">3. Communicator</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/rsts/application.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="getting-familiar">
+<span id="application"></span><h1>2. Getting familiar<a class="headerlink" href="#getting-familiar" title="Permalink to this headline">¶</a></h1>
+<div class="sidebar">
+<p class="first sidebar-title">Summary</p>
+<table class="last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Info:</th><td class="field-body">Xperior basic concepts; things you should know when using the application on the daily basis...</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Target:</th><td class="field-body">users</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Status:</th><td class="field-body">mature</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p id="index-0">After you successfully installed and ran the application, it is time to have a closer look on what is possible.</p>
+<hr class="docutils" />
+<div class="section" id="appearence">
+<span id="appearance"></span><h2>2.1. Appearence<a class="headerlink" href="#appearence" title="Permalink to this headline">¶</a></h2>
+<p>Xperior manages operations with child objects, special files; handles shortcuts events, toolbar events, ...</p>
+<div class="figure align-left" style="width: 100%">
+<img alt="../_images/XPERIOR-block-structure.jpg" src="../_images/XPERIOR-block-structure.jpg" />
+<p class="caption">Figure: Xperior Block Diagram</p>
+</div>
+<p>Xperior application runs from network drive or locally. Automatically saves/loads user settings to/from Windows Registry system.</p>
+</div>
+<div class="section" id="build-in-python-interpreter">
+<span id="interpreter"></span><h2>2.2. Build-in Python interpreter<a class="headerlink" href="#build-in-python-interpreter" title="Permalink to this headline">¶</a></h2>
+<p>Xperior application is completely based on <a class="reference external" href="http://www.python.org">python programming language</a>. The python interpreter is contained in the form of <a class="reference internal" href="communicator.html#shell"><em>Shell</em></a> and <a class="reference internal" href="communicator.html#editor"><em>Editor</em></a>. You can use the Shell command window for executing the simple statements.</p>
+</div>
+<div class="section" id="error-logging-and-error-report">
+<span id="elogging"></span><h2>2.3. Error Logging and Error Report<a class="headerlink" href="#error-logging-and-error-report" title="Permalink to this headline">¶</a></h2>
+<p>Exceptional behavior caused by application itself, by error in expression in <a class="reference internal" href="communicator.html#shell"><em>Shell</em></a>, used script in <a class="reference internal" href="communicator.html#communicator"><em>Communicator</em></a> or other source is logged and error can be reported. <tt class="docutils literal"><span class="pre">Error</span> <span class="pre">Report</span> <span class="pre">Form</span></tt> consist of <em>problem description</em> which should be filled by user and <em>log files</em> containing content of <tt class="docutils literal"><span class="pre">xperior_[PID].log</span></tt> file, versions of used modules and environment variables. By pressing the <em class="guilabel"><span class="accelerator">G</span>enerate to clipboard</em> all the text is generated into the clipboard and can be sent to a specified email address.</p>
+<p>Following example shows a result of writing the <tt class="xref py py-obj docutils literal"><span class="pre">test</span></tt> expression into the <a class="reference internal" href="communicator.html#shell"><em>Shell</em></a>. If test object is not defined, such Frame is shown. You can click to <em class="guilabel"><span class="accelerator">S</span>end report</em> if You believe the bug should be fixed in the XPERIOR application itself.</p>
+<div class="figure align-left" style="width: 100%">
+<img alt="../_images/XPERIOR-Communicator-elog+ereport.jpg" src="../_images/XPERIOR-Communicator-elog+ereport.jpg" />
+<p class="caption">Figure: Error Logging and Error Report</p>
+</div>
+</div>
+<div class="section" id="logging-facility">
+<span id="logging"></span><h2>2.4. Logging Facility<a class="headerlink" href="#logging-facility" title="Permalink to this headline">¶</a></h2>
+<p>Logging module (see Python&#8217;s <a class="reference external" href="http://docs.python.org/2.7/library/logging.html">logging module</a>) from default python distribution is used in Xperior application as well. Four loggers are introduced: <em>root, fapp, script, raw</em>.</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">Root</span> <span class="pre">logger</span></tt>: if any 3th party module is using logging module as well than output will be redirected to Xperior&#8217;s <a class="reference internal" href="communicator.html#logging-trace"><em>Logging Trace</em></a> and the log file</li>
+<li><tt class="docutils literal"><span class="pre">Fapp</span> <span class="pre">logger</span></tt>: is internal logger informing the user about what the application is doing, for instance how long the script ran, which arguments are passed to VISA device instance, showing syntax error traceback, etc. The output of the logger is the <a class="reference internal" href="communicator.html#logging-trace"><em>Logging Trace</em></a> and the log file</li>
+<li><tt class="docutils literal"><span class="pre">Script</span> <span class="pre">logger</span></tt>: can be used in script itself, printing the output to the current stdout, which is normally <a class="reference internal" href="communicator.html#ptc-trace"><em>Protocol Trace</em></a> or <a class="reference internal" href="communicator.html#shell"><em>Shell</em></a></li>
+<li><tt class="docutils literal"><span class="pre">Raw</span> <span class="pre">logger</span></tt>: is an internal logger</li>
+</ul>
+<div class="section" id="how-to-use-a-logger-change-logging-level">
+<span id="logger-setup"></span><h3>2.4.1. How to use a logger, change logging level<a class="headerlink" href="#how-to-use-a-logger-change-logging-level" title="Permalink to this headline">¶</a></h3>
+<p>When developing a script in <a class="reference internal" href="communicator.html#communicator"><em>Communicator</em></a>, you want to see intermediate logging outputs which may also be present in final version of your script. Using <strong>print</strong> statements is not an elegant solution and also requires to delete or comment out the statements after you finish debugging your code. With loggers you can just set the logging level in accordance to your current code stage. Use <tt class="docutils literal"><span class="pre">script</span> <span class="pre">logger</span></tt> like this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">logging</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s">&#39;script&#39;</span><span class="p">)</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span> <span class="c">#logging.INFO after script development is finished</span>
+<span class="c">#script code follows...</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;this is a debug message&#39;</span><span class="p">)</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;this is an information&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>You may also want to change the logging level of <tt class="docutils literal"><span class="pre">root</span> <span class="pre">logger</span></tt> or <tt class="docutils literal"><span class="pre">fapp</span> <span class="pre">logger</span></tt> in order to increase/decrease information verbosity:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">()</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">CRITICAL</span><span class="p">)</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s">&#39;fapp&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">CRITICAL</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">When you start <em>xperior.exe &#8211;level=DEBUG</em> the logging level for both about mentioned loggers is set to DEBUG. DEBUG level is however recommended to application&#8217;s development purposes only.</p>
+</div>
+<p>The relation between used loggers, handlers and formaters is shown in following figure.</p>
+<div class="figure align-left" style="width: 100%">
+<img alt="../_images/XPERIOR-logging_schematic.jpg" src="../_images/XPERIOR-logging_schematic.jpg" />
+<p class="caption">Figure: Logging Facility</p>
+</div>
+</div>
+</div>
+<div class="section" id="accessing-internal-objects-on-runtime">
+<span id="internal-access"></span><h2>2.5. Accessing internal objects on runtime<a class="headerlink" href="#accessing-internal-objects-on-runtime" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference internal" href="communicator.html#editor"><em>Communicator&#8217;s Commands Editor</em></a> and <a class="reference internal" href="communicator.html#shell"><em>Shell</em></a> work with the same namespace. That means anything what is defined in Editor and passed to Interpreter (with Run button) is also accessible in Shell, and vice versa. In the same <strong>globals</strong> is stored special variable pointing to XPERIOR Application&#8217;s internal objects. The variable&#8217;s name is <tt class="docutils literal"><span class="pre">_int</span></tt>.</p>
+<p>The idea behind it is to offer XPERIOR and its sub-application&#8217;s functionality to the User to fully automate her/his scripts. For example it is possible to use Extractor in scripts itself; make automatic entries of script results in <a class="reference internal" href="reporter.html#reporter"><em>Reporter</em></a>; initiate own Panel or Frames for user interaction; choosing visible sub-application in Notebook through code in <a class="reference internal" href="adv_concepts.html#startup"><em>startup.py</em></a> file; etc.</p>
+<p>Type <tt class="docutils literal"><span class="pre">_int.</span></tt> in <a class="reference internal" href="communicator.html#editor"><em>Editor</em></a> or <a class="reference internal" href="communicator.html#shell"><em>Shell</em></a> to activate AutoComplete Help which leads you further...</p>
+<div class="figure align-left" style="width: 100%">
+<img alt="../_images/auto-complete_1.jpg" src="../_images/auto-complete_1.jpg" />
+<p class="caption">Figure: Accessing Xperior&#8217;s Main Frame object on runtime</p>
+</div>
+<p>Next Figure maps part of hierarchical distributions of internal objects. For complete map, source code needs to be analyzed by User her/himself. List below the Figure shows probably the most wanted objects to access. Short usage examples are included.</p>
+<div class="figure align-left" style="width: 100%">
+<img alt="../_images/XPERIOR-internal-objects.jpg" src="../_images/XPERIOR-internal-objects.jpg" />
+<p class="caption">Figure: Xperior Internal Objects</p>
+</div>
+<p>Following table shows some examples, it is not a complete list of all objects!</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># ------------------------------------------------------------------------------</span>
+<span class="c"># Communicator:</span>
+<span class="c"># ------------------------------------------------------------------------------</span>
+<span class="n">_int</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">nb</span><span class="o">.</span><span class="n">communicator</span> <span class="c"># Communicator Panel</span>
+<span class="n">_int</span><span class="o">.</span><span class="n">editor</span> <span class="c"># Editor&#39;s Notebook Manager</span>
+<span class="n">_int</span><span class="o">.</span><span class="n">protocol</span> <span class="c"># Protocol Trace Panel</span>
+<span class="n">_int</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">vcp</span> <span class="c"># Vertical Control Panel</span>
+<span class="n">_int</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">nb</span><span class="o">.</span><span class="n">communicator</span><span class="o">.</span><span class="n">p</span> <span class="c"># Path Panel</span>
+<span class="c"># ------------------------------------------------------------------------------</span>
+<span class="n">_int</span><span class="o">.</span><span class="n">editor</span><span class="o">.</span><span class="n">get_active_book</span><span class="p">()</span> <span class="c"># Commands Editor STC</span>
+<span class="n">_int</span><span class="o">.</span><span class="n">editor</span><span class="o">.</span><span class="n">efpath</span> <span class="c"># Editor File Path - active book</span>
+<span class="n">_int</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">nb</span><span class="o">.</span><span class="n">communicator</span><span class="o">.</span><span class="n">esp</span><span class="o">.</span><span class="n">editor</span><span class="o">.</span><span class="n">get_active_book</span><span class="p">()</span><span class="o">.</span><span class="n">FoldAll</span><span class="p">()</span> <span class="c">#</span>
+<span class="n">_int</span><span class="o">.</span><span class="n">shell</span> <span class="c"># Interactive Console STC</span>
+<span class="n">_int</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">wrap</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span> <span class="c"># wraping lines</span>
+<span class="n">_int</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">eframe</span><span class="o">.</span><span class="n">Show</span><span class="p">()</span> <span class="c"># display Error Logging Frame (also when closed before)</span>
+<span class="n">_int</span><span class="o">.</span><span class="n">interp</span> <span class="c"># Python Interpreter</span>
+<span class="n">_int</span><span class="o">.</span><span class="n">interp</span><span class="o">.</span><span class="n">compileAndRun</span><span class="p">(</span><span class="n">command</span><span class="p">)</span> <span class="c">#</span>
+<span class="n">_int</span><span class="o">.</span><span class="n">interp</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
+<span class="n">_int</span><span class="o">.</span><span class="n">protocol</span> <span class="c"># Protocol Trace STC</span>
+<span class="n">_int</span><span class="o">.</span><span class="n">protocol</span><span class="o">.</span><span class="n">getTimeString</span><span class="p">()</span> <span class="c"># current time like &#39;17:15:38.688&#39;</span>
+<span class="n">_int</span><span class="o">.</span><span class="n">protocol</span><span class="o">.</span><span class="n">get_current_path</span><span class="p">()</span> <span class="c">#get absolute path of generated protocol trace</span>
+<span class="c"># ------------------------------------------------------------------------------</span>
+<span class="c"># Reporter:</span>
+<span class="c"># ------------------------------------------------------------------------------</span>
+<span class="n">_int</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">nb</span><span class="o">.</span><span class="n">reporter</span> <span class="c"># Reporter Panel</span>
+<span class="n">_int</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">nb</span><span class="o">.</span><span class="n">reporter</span><span class="o">.</span><span class="n">RunSelectedScript</span><span class="p">()</span> <span class="c">#</span>
+<span class="n">_int</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">nb</span><span class="o">.</span><span class="n">reporter</span><span class="o">.</span><span class="n">SaveReportsAndUpdate</span><span class="p">()</span> <span class="c">#</span>
+<span class="n">_int</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">nb</span><span class="o">.</span><span class="n">reporter</span><span class="o">.</span><span class="n">rp</span> <span class="c"># Report Panel</span>
+<span class="n">_int</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">nb</span><span class="o">.</span><span class="n">reporter</span><span class="o">.</span><span class="n">vcp</span> <span class="c"># Vertical Control Panel</span>
+<span class="c"># ------------------------------------------------------------------------------</span>
+<span class="n">_int</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">nb</span><span class="o">.</span><span class="n">reporter</span><span class="o">.</span><span class="n">rp</span><span class="o">.</span><span class="n">rep</span> <span class="c"># Report Class instance</span>
+<span class="n">_int</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">nb</span><span class="o">.</span><span class="n">reporter</span><span class="o">.</span><span class="n">rp</span><span class="o">.</span><span class="n">GetScriptPath</span><span class="p">()</span> <span class="c">#</span>
+<span class="n">_int</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">nb</span><span class="o">.</span><span class="n">reporter</span><span class="o">.</span><span class="n">rp</span><span class="o">.</span><span class="n">ReloadAll</span><span class="p">()</span> <span class="c">#</span>
+
+<span class="n">_int</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">frame</span> <span class="c"># main frame</span>
+<span class="c"># dialog box example:</span>
+<span class="k">def</span> <span class="nf">waitkey</span><span class="p">(</span><span class="n">message</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    freeze script execution until user responds on initiated message box.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dlg</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">MessageDialog</span><span class="p">(</span><span class="n">_int</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">frame</span><span class="p">,</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">message</span> <span class="ow">or</span> <span class="s">&quot;press ok to continue&quot;</span><span class="p">,</span>
+                           <span class="s">&quot;Waitkey Message&quot;</span><span class="p">,</span> <span class="n">style</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">OK</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">dlg</span><span class="o">.</span><span class="n">ShowModal</span><span class="p">()</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="k">pass</span>
+
+<span class="n">_int</span><span class="o">.</span><span class="n">editor</span><span class="o">.</span><span class="n">efpath</span> <span class="c"># path to opened file in Commands Editor</span>
+<span class="c"># editor file path exapmle:</span>
+<span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">_int</span><span class="o">.</span><span class="n">editor</span><span class="o">.</span><span class="n">efpath</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="s">&quot;.i3e&quot;</span><span class="p">:</span>
+    <span class="k">print</span> <span class="s">&quot;Not a python script for Xperior&quot;</span>
+
+<span class="n">_int</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">nb</span><span class="o">.</span><span class="n">reporter</span><span class="o">.</span><span class="n">rp</span><span class="o">.</span><span class="n">r</span><span class="o">.</span><span class="n">obj_data</span><span class="p">[</span><span class="s">&#39;TEST&#39;</span><span class="p">]</span> <span class="c"># name of selected script in Reporter</span>
+<span class="c"># exapmle:</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">_int</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">nb</span><span class="o">.</span><span class="n">reporter</span><span class="o">.</span><span class="n">rp</span><span class="o">.</span><span class="n">r</span><span class="o">.</span><span class="n">obj_data</span><span class="p">[</span><span class="s">&#39;TEST&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="n">_int</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">nb</span><span class="o">.</span><span class="n">communicator</span><span class="o">.</span><span class="n">esp</span><span class="o">.</span><span class="n">editor</span><span class="o">.</span><span class="n">efpath</span><span class="p">:</span>
+    <span class="n">waitkey</span><span class="p">(</span><span class="s">&quot;Please start this script from the Reporter (list selector needs to be active on that position).&quot;</span><span class="p">)</span>
+
+<span class="n">_int</span><span class="o">.</span><span class="n">vcp</span><span class="o">.</span><span class="n">executeStop</span> <span class="c"># Communicator&#39;s function</span>
+<span class="c"># script stop exapmle:</span>
+<span class="k">if</span> <span class="n">something_goes_wrong_and_you_want_to_stop_the_script</span><span class="p">:</span>
+    <span class="n">_int</span><span class="o">.</span><span class="n">vcp</span><span class="o">.</span><span class="n">executeStop</span><span class="p">()</span> <span class="c"># better: xlib.execute_stop()</span>
+
+<span class="n">_int</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">nb</span> <span class="c"># Notebook</span>
+<span class="c"># Notebook view exapmle, activate Extractor:</span>
+<span class="n">_int</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">nb</span><span class="o">.</span><span class="n">SetSelection</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Most of the internal function calls or object accesses which are in general interest are exported into the <a class="reference internal" href="flib.html#xperior-lib"><em>Xperior Library</em></a>.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="communicator.html" title="3. Communicator"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="install.html" title="1. Getting started"
+             >previous</a> |</li>
+        <li><a href="../index.html">Xperior 1.3.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, noriba GmbH.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,1164 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>flib &mdash; Xperior 1.3.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.3.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="top" title="Xperior 1.3.0 documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">Xperior 1.3.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for flib</h1><div class="highlight"><pre>
+<span class="c">###############################################################################</span>
+<span class="c">#!/usr/bin/env python</span>
+<span class="c"># -*- coding: utf-8 -*-</span>
+<span class="c">#</span>
+<span class="c">#    COPYRIGHT:         mixed</span>
+<span class="c">#</span>
+<span class="c">#    NAME OF PROJECT:   Xperior library</span>
+<span class="c">#</span>
+<span class="c">#    LANGUAGE:          Python</span>
+<span class="c">#</span>
+<span class="c">#    MODULE:            $Workfile: xlib.py $</span>
+<span class="c">#</span>
+<span class="c">#    BACKGROUND:        library imports * to interpreter&#39;s locals during</span>
+<span class="c">#                       startup phase.</span>
+<span class="c">#</span>
+<span class="c">#    AUTHOR:            Jiri Sostok &lt;Jiri.Sostok@rohde-schwarz.com&gt;,</span>
+<span class="c">#                                   &lt;jsostok@yahoo.com&gt;</span>
+<span class="c">#</span>
+<span class="c">###############################################################################</span>
+
+<span class="c">#from __future__ import print_function</span>
+
+<span class="kn">import</span> <span class="nn">wx</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">types</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">__builtin__</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">lib</span> <span class="kn">import</span> <span class="n">fframes</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="k">pass</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">utilities</span>
+    <span class="kn">import</span> <span class="nn">utilities.Communicator.system.pyvisa</span> <span class="kn">as</span> <span class="nn">pyvisa</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="k">pass</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">lib.rs.scpi</span> <span class="kn">as</span> <span class="nn">rs_scpi</span>
+    <span class="kn">import</span> <span class="nn">lib.rs.lib</span> <span class="kn">as</span> <span class="nn">rs_lib</span>
+    <span class="kn">import</span> <span class="nn">lib.rs.host</span> <span class="kn">as</span> <span class="nn">rs_host</span>    
+    <span class="kn">import</span> <span class="nn">lib.rs.test_metric</span> <span class="kn">as</span> <span class="nn">rs_test_metric</span>
+    <span class="kn">import</span> <span class="nn">lib.device_monitor</span> <span class="kn">as</span> <span class="nn">device_monitor</span>
+    <span class="kn">import</span> <span class="nn">lib.marker_for_redmond</span> <span class="kn">as</span> <span class="nn">marker_for_redmond</span>
+<span class="k">except</span> <span class="ne">Exception</span><span class="p">,</span> <span class="n">err</span><span class="p">:</span>
+    <span class="c"># optional library which could be missing</span>
+    <span class="k">pass</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">mpl_toolkits.mplot3d</span> <span class="kn">import</span> <span class="n">Axes3D</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="n">Axes3D</span> <span class="o">=</span> <span class="bp">None</span>
+
+<span class="n">_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s">&#39;xapp&#39;</span><span class="p">)</span>
+
+
+<span class="c">## class definitions    ##-----------------------------------------------------</span>
+<div class="viewcode-block" id="Cleartool"><a class="viewcode-back" href="../rsts/flib.html#flib.Cleartool">[docs]</a><span class="k">class</span> <span class="nc">Cleartool</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Cleartool in Python.</span>
+<span class="sd">        </span>
+<span class="sd">        Clearcase command will be executed with os.P_WAIT flag. </span>
+
+<span class="sd">        Not all &quot;cleartool&quot; commands are rewritten as instance methods.</span>
+<span class="sd">        If you want to use another command, make it like this:</span>
+
+<span class="sd">            self._command = &quot;another_command param1 param2 param3&quot;</span>
+
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">print_out</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">output_string</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+        <span class="n">prog_files</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s">&#39;PROGRAMFILES&#39;</span><span class="p">]</span>
+        <span class="nb">vars</span> <span class="o">=</span> <span class="p">[</span><span class="n">prog_files</span> <span class="o">+</span> <span class="s">r&#39;\Rational\ClearCase\bin\cleartool.exe&#39;</span><span class="p">,</span> 
+                <span class="n">prog_files</span> <span class="o">+</span> <span class="s">r&#39;\IBM\RationalSDLC\ClearCase\bin\cleartool.exe&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cc_path</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+        <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="nb">vars</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">var</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_cc_path</span> <span class="o">=</span> <span class="n">var</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cc_path</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s">&quot;None of </span><span class="si">%s</span><span class="s"> exists!&quot;</span> <span class="o">%</span><span class="nb">vars</span>
+            <span class="n">_logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;warning: parameter for internal use only&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arguments</span><span class="p">):</span>
+        <span class="n">command_line</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s"> </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cc_path</span><span class="p">),</span> <span class="n">arguments</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">command_line</span> <span class="o">=</span> <span class="n">command_line</span>
+        <span class="n">fo_i</span><span class="p">,</span> <span class="n">fo_o</span><span class="p">,</span> <span class="n">fo_e</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">popen3</span><span class="p">(</span><span class="n">command_line</span><span class="p">)</span>
+        <span class="n">content_o</span> <span class="o">=</span> <span class="n">fo_o</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="n">content_e</span> <span class="o">=</span> <span class="n">fo_e</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="p">[</span><span class="n">fo</span><span class="o">.</span><span class="n">close</span><span class="p">()</span> <span class="k">for</span> <span class="n">fo</span> <span class="ow">in</span> <span class="p">[</span><span class="n">fo_i</span><span class="p">,</span> <span class="n">fo_o</span><span class="p">,</span> <span class="n">fo_e</span><span class="p">]]</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">content_o</span><span class="o">.</span><span class="n">isspace</span><span class="p">():</span> <span class="c">#some valuable information? print!</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">print_out</span><span class="p">:</span>
+                <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="s">; stdout: </span><span class="si">%s</span><span class="s">&#39;</span><span class="p">,</span> <span class="n">arguments</span><span class="p">,</span> <span class="n">content_o</span><span class="p">)</span>
+                <span class="k">print</span><span class="p">(</span><span class="n">content_o</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">output_string</span> <span class="o">=</span> <span class="n">content_o</span>
+        <span class="k">if</span> <span class="n">content_e</span><span class="p">:</span>
+            <span class="n">_logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="s">; stderr: </span><span class="si">%s</span><span class="s">&#39;</span><span class="p">,</span> <span class="n">arguments</span><span class="p">,</span> <span class="n">content_e</span><span class="p">)</span>
+
+    <span class="n">_command</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">fget</span><span class="o">=</span><span class="n">_get</span><span class="p">,</span> <span class="n">fset</span><span class="o">=</span><span class="n">_set</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Cleartool.add_to_source_control"><a class="viewcode-back" href="../rsts/flib.html#flib.Cleartool.add_to_source_control">[docs]</a>    <span class="k">def</span> <span class="nf">add_to_source_control</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_path</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;self._command = &#39;mkelem -nco -mkpath -c autocomment %s&#39;%file_path&#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_command</span> <span class="o">=</span> <span class="s">&#39;mkelem -nco -mkpath -c autocomment &quot;</span><span class="si">%s</span><span class="s">&quot;&#39;</span> <span class="o">%</span><span class="n">file_path</span>
+</div>
+<div class="viewcode-block" id="Cleartool.checkin"><a class="viewcode-back" href="../rsts/flib.html#flib.Cleartool.checkin">[docs]</a>    <span class="k">def</span> <span class="nf">checkin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_path</span><span class="p">,</span> <span class="n">comment</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;self._command = &#39;checkin -c %s %s&#39; %(comment, file_path)&#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_command</span> <span class="o">=</span> <span class="s">&#39;checkin -c &quot;</span><span class="si">%s</span><span class="s">&quot; &quot;</span><span class="si">%s</span><span class="s">&quot;&#39;</span> <span class="o">%</span><span class="p">(</span><span class="n">comment</span><span class="p">,</span> <span class="n">file_path</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Cleartool.checkout"><a class="viewcode-back" href="../rsts/flib.html#flib.Cleartool.checkout">[docs]</a>    <span class="k">def</span> <span class="nf">checkout</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_path</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;self._command = &#39;checkout -reserved -nc %s&#39; %file_path&#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_command</span> <span class="o">=</span> <span class="s">&#39;checkout -reserved -nc &quot;</span><span class="si">%s</span><span class="s">&quot;&#39;</span> <span class="o">%</span><span class="n">file_path</span>
+</div>
+<div class="viewcode-block" id="Cleartool.compare"><a class="viewcode-back" href="../rsts/flib.html#flib.Cleartool.compare">[docs]</a>    <span class="k">def</span> <span class="nf">compare</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_path</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;self._command = &#39;diff -graphical -predecessor %s&#39; %file_path&#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_command</span> <span class="o">=</span> <span class="s">&#39;diff -graphical -predecessor &quot;</span><span class="si">%s</span><span class="s">&quot;&#39;</span> <span class="o">%</span><span class="n">file_path</span>
+</div>
+<div class="viewcode-block" id="Cleartool.history"><a class="viewcode-back" href="../rsts/flib.html#flib.Cleartool.history">[docs]</a>    <span class="k">def</span> <span class="nf">history</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_path</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;self._command = &#39;lshistory -graphical &quot;%s&quot;&#39; %file_path&#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_command</span> <span class="o">=</span> <span class="s">&#39;lshistory -graphical &quot;</span><span class="si">%s</span><span class="s">&quot;&#39;</span> <span class="o">%</span><span class="n">file_path</span>
+</div>
+<div class="viewcode-block" id="Cleartool.undo_checkout"><a class="viewcode-back" href="../rsts/flib.html#flib.Cleartool.undo_checkout">[docs]</a>    <span class="k">def</span> <span class="nf">undo_checkout</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_path</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;self._command = &#39;uncheckout -keep &quot;%s&quot;&#39; %file_path&#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_command</span> <span class="o">=</span> <span class="s">&#39;uncheckout -keep &quot;</span><span class="si">%s</span><span class="s">&quot;&#39;</span> <span class="o">%</span><span class="n">file_path</span>
+</div>
+<div class="viewcode-block" id="Cleartool.version_tree"><a class="viewcode-back" href="../rsts/flib.html#flib.Cleartool.version_tree">[docs]</a>    <span class="k">def</span> <span class="nf">version_tree</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_path</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;self._command = &#39;lsvtree -graphical &quot;%s&quot;&#39; %file_path&#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_command</span> <span class="o">=</span> <span class="s">&#39;lsvtree -graphical &quot;</span><span class="si">%s</span><span class="s">&quot;&#39;</span> <span class="o">%</span><span class="n">file_path</span>
+
+</div></div>
+<span class="k">class</span> <span class="nc">DeviceDialog</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">Dialog</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">&quot;Choose a Device&quot;</span><span class="p">,</span> <span class="nb">id</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> 
+                 <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span><span class="mi">250</span><span class="p">),</span> <span class="n">pos</span><span class="o">=</span><span class="n">wx</span><span class="o">.</span><span class="n">DefaultPosition</span><span class="p">,</span> 
+                 <span class="n">style</span><span class="o">=</span><span class="n">wx</span><span class="o">.</span><span class="n">DEFAULT_DIALOG_STYLE</span><span class="p">):</span>
+
+        <span class="n">wx</span><span class="o">.</span><span class="n">Dialog</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="nb">id</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">SetBackgroundColour</span><span class="p">(</span><span class="s">&quot;gray&quot;</span><span class="p">)</span>
+
+        <span class="n">panelsize</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">GetSize</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="mi">25</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">GetSize</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="mi">45</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">panel</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">Panel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="n">panelsize</span><span class="p">)</span>
+        <span class="n">default_colour</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">panel</span><span class="o">.</span><span class="n">GetBackgroundColour</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">panel</span><span class="o">.</span><span class="n">SetBackgroundColour</span><span class="p">(</span><span class="n">default_colour</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">panel</span><span class="o">.</span><span class="n">st</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">StaticText</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">panel</span><span class="p">,</span> 
+                                   <span class="n">label</span><span class="o">=</span><span class="s">&quot;Choose a Device to Start the Script&quot;</span><span class="p">,</span> 
+                                   <span class="n">pos</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">panel</span><span class="o">.</span><span class="n">lc</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">ListCtrl</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">panel</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">30</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">354</span><span class="p">,</span><span class="mi">120</span><span class="p">),</span> 
+                                    <span class="n">style</span><span class="o">=</span><span class="n">wx</span><span class="o">.</span><span class="n">LC_REPORT</span><span class="p">)</span> 
+        <span class="bp">self</span><span class="o">.</span><span class="n">panel</span><span class="o">.</span><span class="n">lc</span><span class="o">.</span><span class="n">InsertColumn</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s">&#39;Alias&#39;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">panel</span><span class="o">.</span><span class="n">lc</span><span class="o">.</span><span class="n">InsertColumn</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s">&#39;Resourcename&#39;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">250</span><span class="p">)</span>
+        <span class="n">devices</span> <span class="o">=</span> <span class="n">_int</span><span class="o">.</span><span class="n">_founded_visa_instruments</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">devices</span><span class="p">)):</span> 
+            <span class="bp">self</span><span class="o">.</span><span class="n">panel</span><span class="o">.</span><span class="n">lc</span><span class="o">.</span><span class="n">InsertStringItem</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">devices</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">panel</span><span class="o">.</span><span class="n">lc</span><span class="o">.</span><span class="n">SetStringItem</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> 
+                      <span class="n">_int</span><span class="o">.</span><span class="n">_founded_visa_instruments</span><span class="p">[</span><span class="n">devices</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span><span class="o">.</span><span class="n">resource_name</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">panel</span><span class="o">.</span><span class="n">ok_button</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">Button</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">panel</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">ID_OK</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span><span class="mi">160</span><span class="p">),</span> 
+                                         <span class="n">label</span><span class="o">=</span><span class="s">&quot;OK&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">80</span><span class="p">,</span><span class="mi">25</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">panel</span><span class="o">.</span><span class="n">cancel_button</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">Button</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">panel</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">ID_CANCEL</span><span class="p">,</span> 
+                                             <span class="n">pos</span><span class="o">=</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span><span class="mi">160</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s">&quot;Cancel&quot;</span><span class="p">,</span> 
+                                             <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">80</span><span class="p">,</span><span class="mi">25</span><span class="p">))</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">panel</span><span class="o">.</span><span class="n">ok_button</span><span class="o">.</span><span class="n">Bind</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">EVT_BUTTON</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">OnOk</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">panel</span><span class="o">.</span><span class="n">lc</span><span class="o">.</span><span class="n">Bind</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">EVT_LIST_ITEM_ACTIVATED</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">OnDblClk</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">dev</span> <span class="o">=</span> <span class="p">[]</span>
+                
+    <span class="k">def</span> <span class="nf">OnDblClk</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="n">item</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">panel</span><span class="o">.</span><span class="n">lc</span><span class="o">.</span><span class="n">GetFocusedItem</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">item</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>            
+            <span class="bp">self</span><span class="o">.</span><span class="n">dev</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">panel</span><span class="o">.</span><span class="n">lc</span><span class="o">.</span><span class="n">GetItemText</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> 
+            <span class="n">clkEvt</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">CommandEvent</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">wxEVT_COMMAND_BUTTON_CLICKED</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">ID_OK</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ProcessEvent</span><span class="p">(</span><span class="n">clkEvt</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">OnOk</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span> 
+        <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">panel</span><span class="o">.</span><span class="n">lc</span><span class="o">.</span><span class="n">GetFirstSelected</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">index</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">wx</span><span class="o">.</span><span class="n">MessageBox</span><span class="p">(</span><span class="s">&quot;No Device selected!&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+        
+        <span class="k">while</span> <span class="n">index</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>            
+            <span class="bp">self</span><span class="o">.</span><span class="n">dev</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">panel</span><span class="o">.</span><span class="n">lc</span><span class="o">.</span><span class="n">GetItemText</span><span class="p">(</span><span class="n">index</span><span class="p">))</span>
+            <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">panel</span><span class="o">.</span><span class="n">lc</span><span class="o">.</span><span class="n">GetNextSelected</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+            
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dev</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span> <span class="c"># for compatibility to old dialog</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dev</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dev</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">event</span><span class="o">.</span><span class="n">Skip</span><span class="p">()</span>        
+
+
+<span class="k">class</span> <span class="nc">Xlib</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">g</span> <span class="o">=</span> <span class="nb">globals</span><span class="p">()</span>
+        <span class="p">[</span><span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">g</span><span class="o">.</span><span class="n">iteritems</span><span class="p">()</span>
+                                      <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">==</span> <span class="n">types</span><span class="o">.</span><span class="n">FunctionType</span><span class="p">]</span>        
+        
+
+<span class="k">class</span> <span class="nc">Hidden_waitkey1</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_obj</span> <span class="o">=</span> <span class="bp">None</span>
+        
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">return</span> <span class="s">&#39;unpausing...&#39;</span>
+        
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">object</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Object will be further forwarded.</span>
+<span class="sd">        </span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_obj</span> <span class="o">=</span> <span class="nb">object</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__repr__</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="MessageDialog"><a class="viewcode-back" href="../rsts/flib.html#flib.MessageDialog">[docs]</a><span class="k">class</span> <span class="nc">MessageDialog</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">MessageDialog</span><span class="p">):</span>
+    
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">caption</span><span class="p">,</span> <span class="o">*</span><span class="n">arg</span><span class="p">,</span> <span class="o">**</span><span class="n">keyw</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;MessageDailog.</span>
+<span class="sd">        </span>
+<span class="sd">        Derived class from wx.MessageDialog. Supports multitesting feature -&gt;</span>
+<span class="sd">        object&#39;s ShowModal method will be replaced with function printing info</span>
+<span class="sd">        and always returns wx.ID_YES.</span>
+
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">keyw</span><span class="p">[</span><span class="s">&#39;style&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">keyw</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;style&#39;</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">YES_NO</span><span class="o">|</span><span class="n">wx</span><span class="o">.</span><span class="n">CANCEL</span><span class="p">)</span>
+        <span class="n">wx</span><span class="o">.</span><span class="n">MessageDialog</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">caption</span><span class="p">,</span> <span class="o">*</span><span class="n">arg</span><span class="p">,</span> <span class="o">**</span><span class="n">keyw</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> <span class="n">message</span>
+
+<div class="viewcode-block" id="MessageDialog.ShowModal"><a class="viewcode-back" href="../rsts/flib.html#flib.MessageDialog.ShowModal">[docs]</a>    <span class="k">def</span> <span class="nf">ShowModal</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">_int</span><span class="o">.</span><span class="n">_multitesting</span><span class="p">:</span>
+            <span class="n">_logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s">&#39;MessageDialog-&gt;veto; reason: multitesting, &#39;</span>\
+                           <span class="s">&#39;message: </span><span class="si">%s</span><span class="s">, return value: </span><span class="si">%s</span><span class="s">&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">message</span><span class="p">,</span> 
+                                                            <span class="n">wx</span><span class="o">.</span><span class="n">ID_YES</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">wx</span><span class="o">.</span><span class="n">ID_YES</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">MessageDialog</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">ShowModal</span><span class="p">()</span>
+
+<span class="c">##-----------------------------------------------------------------------------</span>
+
+
+<span class="c">## function definitions ##-----------------------------------------------------</span></div></div>
+<div class="viewcode-block" id="bin2hex"><a class="viewcode-back" href="../rsts/flib.html#flib.bin2hex">[docs]</a><span class="k">def</span> <span class="nf">bin2hex</span><span class="p">(</span><span class="n">bin_str</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;binary to hexadecimal conversion -&gt; string.</span>
+<span class="sd">    </span>
+<span class="sd">    Returns hexadecimal string of input binary string.</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">mod</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">bin_str</span><span class="p">)</span> <span class="o">%</span> <span class="mi">4</span>
+    <span class="n">_str</span> <span class="o">=</span> <span class="n">bin_str</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">bin_str</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">mod</span> <span class="ow">and</span> <span class="p">(</span><span class="mi">4</span> <span class="o">-</span> <span class="n">mod</span><span class="p">)))</span> <span class="c">#4 bits alligned</span>
+    <span class="n">bin_map</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;0000&#39;</span><span class="p">:</span> <span class="s">&#39;0&#39;</span><span class="p">,</span> <span class="s">&#39;0001&#39;</span><span class="p">:</span> <span class="s">&#39;1&#39;</span><span class="p">,</span> <span class="s">&#39;0010&#39;</span><span class="p">:</span> <span class="s">&#39;2&#39;</span><span class="p">,</span> <span class="s">&#39;0011&#39;</span><span class="p">:</span> <span class="s">&#39;3&#39;</span><span class="p">,</span> 
+               <span class="s">&#39;0100&#39;</span><span class="p">:</span> <span class="s">&#39;4&#39;</span><span class="p">,</span> <span class="s">&#39;0101&#39;</span><span class="p">:</span> <span class="s">&#39;5&#39;</span><span class="p">,</span> <span class="s">&#39;0110&#39;</span><span class="p">:</span> <span class="s">&#39;6&#39;</span><span class="p">,</span> <span class="s">&#39;0111&#39;</span><span class="p">:</span> <span class="s">&#39;7&#39;</span><span class="p">,</span> 
+               <span class="s">&#39;1000&#39;</span><span class="p">:</span> <span class="s">&#39;8&#39;</span><span class="p">,</span> <span class="s">&#39;1001&#39;</span><span class="p">:</span> <span class="s">&#39;9&#39;</span><span class="p">,</span> <span class="s">&#39;1010&#39;</span><span class="p">:</span> <span class="s">&#39;A&#39;</span><span class="p">,</span> <span class="s">&#39;1011&#39;</span><span class="p">:</span> <span class="s">&#39;B&#39;</span><span class="p">,</span> 
+               <span class="s">&#39;1100&#39;</span><span class="p">:</span> <span class="s">&#39;C&#39;</span><span class="p">,</span> <span class="s">&#39;1101&#39;</span><span class="p">:</span> <span class="s">&#39;D&#39;</span><span class="p">,</span> <span class="s">&#39;1110&#39;</span><span class="p">:</span> <span class="s">&#39;E&#39;</span><span class="p">,</span> <span class="s">&#39;1111&#39;</span><span class="p">:</span> <span class="s">&#39;F&#39;</span><span class="p">}</span>
+    <span class="n">hex_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">bin_map</span><span class="p">[</span><span class="n">_str</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="mi">4</span><span class="p">]]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">_str</span><span class="p">),</span> <span class="mi">4</span><span class="p">)]</span>
+    <span class="k">return</span> <span class="s">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">hex_list</span><span class="p">)</span>
+
+    </div>
+<div class="viewcode-block" id="bin2dec"><a class="viewcode-back" href="../rsts/flib.html#flib.bin2dec">[docs]</a><span class="k">def</span> <span class="nf">bin2dec</span><span class="p">(</span><span class="n">bin_str</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;binary to decimal conversion -&gt; int.</span>
+<span class="sd">    </span>
+<span class="sd">    Returns integer of input binary string.</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">return</span> <span class="nb">eval</span><span class="p">(</span><span class="s">&#39;0x&#39;</span> <span class="o">+</span> <span class="n">bin2hex</span><span class="p">(</span><span class="n">bin_str</span><span class="p">))</span>
+
+</div>
+<div class="viewcode-block" id="copy_remote_file_from"><a class="viewcode-back" href="../rsts/flib.html#flib.copy_remote_file_from">[docs]</a><span class="k">def</span> <span class="nf">copy_remote_file_from</span><span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="n">from_path</span><span class="p">,</span> <span class="n">to_path</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Copy remote file from VISA interface -&gt; None.</span>
+<span class="sd">    </span>
+<span class="sd">    Device specifies remote device. Both paths are absolute file paths. If file</span>
+<span class="sd">    on device doesn&#39;t exist, &quot;to_path&quot; file content will carry error message.</span>
+<span class="sd">    </span>
+<span class="sd">    Note: </span>
+<span class="sd">     * path names like: r&#39;parent\\child&#39; or &#39;parent\\\\child&#39;</span>
+<span class="sd">     * File size is limited to 999.999999 MB.</span>
+<span class="sd">     * Use remote device&#39;s &#39;D:&#39; drive (user guide recommendation). </span>
+<span class="sd">    </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;copy_remote_file_from, </span><span class="si">%s</span><span class="s">, from: </span><span class="si">%s</span><span class="s">, to: </span><span class="si">%s</span><span class="s">&#39;</span><span class="p">,</span> 
+                 <span class="n">device</span><span class="p">,</span> <span class="n">from_path</span><span class="p">,</span> <span class="n">to_path</span><span class="p">)</span>
+    <span class="n">content</span> <span class="o">=</span> <span class="n">open_remote_file</span><span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="n">from_path</span><span class="p">)</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">to_path</span><span class="p">,</span> <span class="s">&#39;wb&#39;</span><span class="p">)</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+</div>
+<div class="viewcode-block" id="copy_remote_file_to"><a class="viewcode-back" href="../rsts/flib.html#flib.copy_remote_file_to">[docs]</a><span class="k">def</span> <span class="nf">copy_remote_file_to</span><span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="n">from_path</span><span class="p">,</span> <span class="n">to_path</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Copy remote file to VISA interface -&gt; None.</span>
+<span class="sd">    </span>
+<span class="sd">    Device specifies remote device. Both paths are absolute file paths. IOError</span>
+<span class="sd">    exception will be raised, if file on &quot;from_path&quot; doesn&#39;t exist.</span>
+<span class="sd">    </span>
+<span class="sd">    Note: </span>
+<span class="sd">     * path names like: r&#39;parent\\child&#39; or &#39;parent\\\\child&#39;</span>
+<span class="sd">     * File size is limited to 999.999999 MB.</span>
+<span class="sd">     * Use remote device&#39;s &#39;D:&#39; drive (user guide recommendation). </span>
+<span class="sd">     </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;copy_remote_file_to, </span><span class="si">%s</span><span class="s">, from: </span><span class="si">%s</span><span class="s">, to: </span><span class="si">%s</span><span class="s">&#39;</span><span class="p">,</span> 
+                 <span class="n">device</span><span class="p">,</span> <span class="n">from_path</span><span class="p">,</span> <span class="n">to_path</span><span class="p">)</span>
+    <span class="n">content</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">from_path</span><span class="p">,</span> <span class="s">&#39;rb&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+    <span class="n">file_len</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+    <span class="n">string</span> <span class="o">=</span> <span class="s">&#39;MMEM:DATA &quot;</span><span class="si">%s</span><span class="s">&quot;,#</span><span class="si">%d%d%s</span><span class="s">&#39;</span> <span class="o">%</span><span class="p">(</span><span class="n">to_path</span><span class="p">,</span> 
+                                        <span class="nb">len</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">file_len</span><span class="p">)),</span>
+                                        <span class="n">file_len</span><span class="p">,</span>
+                                        <span class="n">content</span><span class="p">)</span>
+    <span class="n">device</span><span class="o">.</span><span class="n">instrument</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">string</span><span class="p">)</span>
+    <span class="n">device</span><span class="o">.</span><span class="n">instrument</span><span class="o">.</span><span class="n">ask</span><span class="p">(</span><span class="s">&#39;*opc?&#39;</span><span class="p">)</span>
+
+    </div>
+<div class="viewcode-block" id="correlation"><a class="viewcode-back" href="../rsts/flib.html#flib.correlation">[docs]</a><span class="k">def</span> <span class="nf">correlation</span><span class="p">(</span><span class="n">pattern1</span><span class="p">,</span> <span class="n">pattern2</span><span class="p">,</span> <span class="n">tolerance</span> <span class="o">=</span> <span class="mi">0</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Binary Correlation Function -&gt; list of &quot;K&quot;s.</span>
+
+<span class="sd">    both arguments have to be either strings or lists of numbers. If numbers,</span>
+<span class="sd">    absolute tolerance can be specified with &#39;tolerance&#39; keyword. If &#39;pattern1&#39;</span>
+<span class="sd">    is larger than &#39;pattern2&#39;, patterns are switched. Function returns list of</span>
+<span class="sd">    K[%]. K is instantaneous correlation value according to the formula:</span>
+
+<span class="sd">            Matches - NonMatches</span>
+<span class="sd">    K[%] = ---------------------- * 100</span>
+<span class="sd">            Matches + NonMatches</span>
+
+<span class="sd">    +===================================================+</span>
+<span class="sd">    |                pattern 2                          |</span>
+<span class="sd">    +===========+=======================================+</span>
+<span class="sd">    | pattern 1 |</span>
+<span class="sd">    +===========+                           +===========+</span>
+<span class="sd">    |                                       | pattern 1 |</span>
+<span class="sd">    | correlation shifts                    +===========+</span>
+<span class="sd">    |---------------------------------------|</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="c"># &#39;where&#39; is larger or equal to &#39;what&#39;</span>
+    <span class="n">what</span><span class="p">,</span> <span class="n">where</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pattern1</span><span class="p">)</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">pattern2</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">pattern1</span><span class="p">,</span> <span class="n">pattern2</span><span class="p">)</span> \
+                                                <span class="ow">or</span> <span class="p">(</span><span class="n">pattern2</span><span class="p">,</span> <span class="n">pattern1</span><span class="p">)</span>
+    <span class="n">T</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">what</span><span class="p">)</span>
+    <span class="n">SHIFTS</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">where</span><span class="p">)</span> <span class="o">-</span> <span class="n">T</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="n">K</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="c">## where += where[0:len(what)]</span>
+
+    <span class="k">for</span> <span class="n">shift</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">SHIFTS</span><span class="p">):</span> <span class="c"># in the length of pattern</span>
+        <span class="n">matches</span> <span class="o">=</span> <span class="nb">len</span><span class="p">([</span><span class="n">what</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">T</span><span class="p">)</span>
+                            <span class="k">if</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">what</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span>
+                           <span class="p">[</span><span class="n">what</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">where</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">shift</span><span class="p">]]</span> <span class="ow">or</span>
+                           <span class="p">[</span><span class="nb">abs</span><span class="p">(</span><span class="n">what</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">where</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">shift</span><span class="p">])</span> <span class="o">&lt;=</span> <span class="n">tolerance</span><span class="p">])[</span><span class="mi">0</span><span class="p">]])</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">                M + N = T</span>
+
+<span class="sd">                M - N           2M - T            2M</span>
+<span class="sd">        K[%] = ------- * 100 = -------- * 100 = (---- - 1) * 100</span>
+<span class="sd">                M + N              T               T</span>
+
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">K</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">100</span><span class="o">*</span><span class="p">((</span><span class="mf">2.0</span><span class="o">*</span><span class="n">matches</span><span class="o">/</span><span class="n">T</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">K</span>
+</div>
+<div class="viewcode-block" id="create_frame"><a class="viewcode-back" href="../rsts/flib.html#flib.create_frame">[docs]</a><span class="k">def</span> <span class="nf">create_frame</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Get wxFrame -&gt; wx.Frame instance.</span>
+<span class="sd">    </span>
+<span class="sd">    Get certain type of Frame which can be used for general purpose. Such a </span>
+<span class="sd">    frame can be used in script as well as in Shell. </span>
+<span class="sd">    </span>
+<span class="sd">    Available frame types are:</span>
+<span class="sd">        &quot;&quot;          .. just a simple frame</span>
+<span class="sd">        &quot;TextCtrl&quot;  .. with TextCtrl and write_text and clear_all methods</span>
+<span class="sd">        &quot;Plot&quot;      .. with Matplotlib Plot Grid</span>
+<span class="sd">        </span>
+<span class="sd">    See examples in \lib\examples and </span>
+<span class="sd">                    \lib\matplotlib_graph_examples</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">class</span> <span class="nc">_Frame</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">Frame</span><span class="p">):</span>
+    
+        <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="nb">id</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">,</span> 
+                    <span class="n">style</span><span class="o">=</span><span class="n">wx</span><span class="o">.</span><span class="n">DEFAULT_FRAME_STYLE</span><span class="o">|</span><span class="n">wx</span><span class="o">.</span><span class="n">NO_FULL_REPAINT_ON_RESIZE</span><span class="o">|</span>\
+                          <span class="n">wx</span><span class="o">.</span><span class="n">STAY_ON_TOP</span><span class="p">):</span>
+            <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">            should be initialized in app, not during script execution. </span>
+<span class="sd">            Using Show(), Hide() is recommended.</span>
+<span class="sd">            </span>
+<span class="sd">            &#39;&#39;&#39;</span>
+            <span class="n">wx</span><span class="o">.</span><span class="n">Frame</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="n">style</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">SetIcon</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">Icon</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">utilities</span><span class="o">.</span><span class="n">_constants</span><span class="o">.</span><span class="n">ICOS_PATH</span><span class="p">,</span> 
+                                           <span class="s">&#39;app.ico&#39;</span><span class="p">),</span> <span class="n">wx</span><span class="o">.</span><span class="n">BITMAP_TYPE_ICO</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Bind</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">EVT_CLOSE</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">OnClose</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">OnClose</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">evt</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Hide</span><span class="p">()</span>
+    
+    
+    
+    <span class="n">frame_class</span> <span class="o">=</span> <span class="n">fframes</span><span class="o">.</span><span class="n">create_frame</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="s">Frame&#39;</span> <span class="o">%</span><span class="nb">type</span><span class="p">,</span> <span class="n">_Frame</span><span class="p">)</span>
+                  
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">frame_class</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s">&#39;No such class: &quot;</span><span class="si">%s</span><span class="s">Frame&quot;&#39;</span> <span class="o">%</span><span class="nb">type</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">frame_class</span><span class="p">(</span><span class="s">&quot;Xperior&#39;s general purpose </span><span class="si">%s</span><span class="s">Frame&quot;</span> <span class="o">%</span><span class="nb">type</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="delete_remote_file"><a class="viewcode-back" href="../rsts/flib.html#flib.delete_remote_file">[docs]</a><span class="k">def</span> <span class="nf">delete_remote_file</span><span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Delete remote file from VISA interface -&gt; None.</span>
+<span class="sd">    </span>
+<span class="sd">    Device specifies remote device. Path is an absolute file path. If file</span>
+<span class="sd">    on device doesn&#39;t exist, &quot;path&quot; file content will carry error message.</span>
+<span class="sd">    </span>
+<span class="sd">    Note: Use remote device&#39;s &#39;D:&#39; drive (user guide recommendation). </span>
+<span class="sd">    </span>
+<span class="sd">    &#39;&#39;&#39;</span>  
+    <span class="n">device</span><span class="o">.</span><span class="n">instrument</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;MMEM:DELete &quot;</span><span class="si">%s</span><span class="s">&quot;&#39;</span> <span class="o">%</span><span class="n">path</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="execute_stop"><a class="viewcode-back" href="../rsts/flib.html#flib.execute_stop">[docs]</a><span class="k">def</span> <span class="nf">execute_stop</span><span class="p">(</span><span class="n">reason</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Force Stop of the running script -&gt; None.</span>
+
+<span class="sd">    It stops in Communicator&#39;s Editor currently running script.</span>
+<span class="sd">    It is same as click on &#39;Stop&#39; button or Ctrl+T shortcut.</span>
+
+<span class="sd">    If multitesting, RuntimeError is raised, which can by catched by single </span>
+<span class="sd">    script execution, storing appropriate verdict and starts next test in </span>
+<span class="sd">    the queue...</span>
+<span class="sd">    </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">msg</span> <span class="o">=</span> <span class="s">&#39;user called execute_stop&#39;</span>
+    <span class="k">if</span> <span class="n">_int</span><span class="o">.</span><span class="n">_multitesting</span><span class="p">:</span>
+        <span class="n">msg</span> <span class="o">+=</span> <span class="s">&#39; in multitest script&#39;</span>
+        <span class="k">if</span> <span class="n">reason</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">+=</span> <span class="s">&#39;: </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span><span class="n">reason</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">reason</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s">: </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">reason</span><span class="p">)</span>
+    <span class="n">_int</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">nb</span><span class="o">.</span><span class="n">communicator</span><span class="o">.</span><span class="n">vcp</span><span class="o">.</span><span class="n">executeForceStop</span><span class="p">(</span><span class="n">immediate</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="findattr"><a class="viewcode-back" href="../rsts/flib.html#flib.findattr">[docs]</a><span class="k">def</span> <span class="nf">findattr</span><span class="p">(</span><span class="n">start_obj</span><span class="p">,</span> <span class="n">string</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ignorecase</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">list_print</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Find attributes -&gt; list of strings. </span>
+<span class="sd">    </span>
+<span class="sd">    Returns list of attributes of specified object. Search recursively for the </span>
+<span class="sd">    depth of &#39;depth&#39;.</span>
+<span class="sd">    </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">RESTRICTED_TYPES</span> <span class="o">=</span> <span class="p">[</span><span class="n">types</span><span class="o">.</span><span class="n">IntType</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">FunctionType</span><span class="p">]</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">def</span> <span class="nf">recursive_search</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">string</span><span class="p">,</span> <span class="n">depth</span><span class="p">,</span> <span class="n">prefix</span><span class="p">):</span>
+        <span class="nb">list</span> <span class="o">=</span> <span class="n">sdir</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">string</span><span class="p">,</span> <span class="n">ignorecase</span><span class="p">,</span> <span class="n">list_print</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+        <span class="n">results</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s">&#39;</span><span class="si">%s%s</span><span class="s">&#39;</span> <span class="o">%</span><span class="p">(</span><span class="n">prefix</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">depth</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">depth</span> <span class="o">-=</span> <span class="mi">1</span>
+            <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+                <span class="n">child</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+                <span class="n">_prefix</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%s%s</span><span class="s">.&#39;</span> <span class="o">%</span><span class="p">(</span><span class="n">prefix</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">child</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">RESTRICTED_TYPES</span><span class="p">:</span>
+                    <span class="n">recursive_search</span><span class="p">(</span><span class="n">child</span><span class="p">,</span> <span class="n">string</span><span class="p">,</span> <span class="n">depth</span><span class="p">,</span> <span class="n">_prefix</span><span class="p">)</span>
+        <span class="k">return</span> 
+    
+    <span class="n">recursive_search</span><span class="p">(</span><span class="n">start_obj</span><span class="p">,</span> <span class="n">string</span><span class="p">,</span> <span class="n">depth</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">list_print</span><span class="p">:</span>
+        <span class="n">print_list</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">results</span>
+
+</div>
+<div class="viewcode-block" id="get_files"><a class="viewcode-back" href="../rsts/flib.html#flib.get_files">[docs]</a><span class="k">def</span> <span class="nf">get_files</span><span class="p">(</span><span class="n">top</span><span class="p">,</span> <span class="n">wildcard</span><span class="o">=</span><span class="s">&#39;*.*&#39;</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Get all files from certain location -&gt; filepaths list.</span>
+<span class="sd">    </span>
+<span class="sd">    Search top directory with complete subdirectory structure and collect </span>
+<span class="sd">    absolute filepaths matching wildcard.</span>
+<span class="sd">    </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">command_line</span> <span class="o">=</span> <span class="s">r&#39;dir </span><span class="si">%s</span><span class="s"> /s /b&#39;</span> <span class="o">%</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">top</span><span class="p">,</span> <span class="n">wildcard</span><span class="p">))</span>
+    <span class="n">fo_i</span><span class="p">,</span> <span class="n">fo_o</span><span class="p">,</span> <span class="n">fo_e</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">popen3</span><span class="p">(</span><span class="n">command_line</span><span class="p">)</span>
+    <span class="n">content_o</span> <span class="o">=</span> <span class="n">fo_o</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="n">content_e</span> <span class="o">=</span> <span class="n">fo_e</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="p">[</span><span class="n">fo</span><span class="o">.</span><span class="n">close</span><span class="p">()</span> <span class="k">for</span> <span class="n">fo</span> <span class="ow">in</span> <span class="p">[</span><span class="n">fo_i</span><span class="p">,</span> <span class="n">fo_o</span><span class="p">,</span> <span class="n">fo_e</span><span class="p">]]</span>
+    <span class="k">if</span> <span class="n">content_o</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">filter</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">,</span> <span class="n">content_o</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">content_e</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span><span class="n">content_e</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="get_screen"><a class="viewcode-back" href="../rsts/flib.html#flib.get_screen">[docs]</a><span class="k">def</span> <span class="nf">get_screen</span><span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Takes printscreen of target remote device -&gt; filepath.</span>
+
+<span class="sd">    File is saved on remote device and transferred to user&#39;s local machine.</span>
+<span class="sd">    Local filepath is returned. File is also executed with os.startfile if</span>
+<span class="sd">    &quot;display&quot; is set to True</span>
+
+<span class="sd">    Note: Because of different remote commands is currently supported: FSQ.</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">APP_PATH</span>      <span class="o">=</span> <span class="s">&#39;XPERIOR&#39;</span>
+    <span class="n">USER_PATH</span>     <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s">&#39;APPDATA&#39;</span><span class="p">],</span> <span class="n">APP_PATH</span><span class="p">)</span>
+    <span class="n">SERVER_FILE_PATH</span> <span class="o">=</span> <span class="s">&quot;D:</span><span class="se">\\</span><span class="s">screen.bmp&quot;</span>
+    <span class="n">CLIENT_FILE_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">USER_PATH</span><span class="p">,</span> <span class="s">&quot;screen.bmp&quot;</span><span class="p">)</span>
+    <span class="n">INFO_STRING</span> <span class="o">=</span> <span class="s">&#39;Request from COMPUTER: </span><span class="si">%s</span><span class="s">, USER: </span><span class="si">%s</span><span class="s"> &#39;</span>\
+                  <span class="s">&#39;              to RESOURCE_NAME: </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span><span class="p">(</span>
+                                    <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s">&#39;COMPUTERNAME&#39;</span><span class="p">],</span>
+                                    <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s">&#39;USERNAME&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">capitalize</span><span class="p">(),</span>
+                                    <span class="n">device</span><span class="o">.</span><span class="n">instrument</span><span class="o">.</span><span class="n">resource_name</span><span class="p">)</span>
+    <span class="n">device</span><span class="o">.</span><span class="n">ask</span><span class="p">(</span><span class="s">&#39;HCOP:DEV:LANG BMP; *opc?&#39;</span><span class="p">)</span>
+    <span class="n">device</span><span class="o">.</span><span class="n">ask</span><span class="p">(</span><span class="s">&#39;HCOP:ITEM:WIND2:TEXT &quot;</span><span class="si">%s</span><span class="s">&quot;; *opc?&#39;</span> <span class="o">%</span><span class="n">INFO_STRING</span><span class="p">)</span>
+    <span class="n">device</span><span class="o">.</span><span class="n">ask</span><span class="p">(</span><span class="s">&#39;HCOPy:ITEM:ALL; *opc?&#39;</span><span class="p">)</span>
+    <span class="n">device</span><span class="o">.</span><span class="n">ask</span><span class="p">(</span><span class="s">&#39;HCOPy:IMM; *opc?&#39;</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">CLIENT_FILE_PATH</span><span class="p">):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">CLIENT_FILE_PATH</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">copy_remote_file_from</span><span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="n">SERVER_FILE_PATH</span><span class="p">,</span> <span class="n">CLIENT_FILE_PATH</span><span class="p">):</span>
+        <span class="k">return</span>
+    <span class="k">if</span> <span class="n">display</span><span class="p">:</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">startfile</span><span class="p">(</span><span class="n">CLIENT_FILE_PATH</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">CLIENT_FILE_PATH</span>
+
+</div>
+<div class="viewcode-block" id="get_script_dir"><a class="viewcode-back" href="../rsts/flib.html#flib.get_script_dir">[docs]</a><span class="k">def</span> <span class="nf">get_script_dir</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;From active Commands Editor Tab -&gt; directory path.</span>
+<span class="sd">    </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">get_script_path</span><span class="p">())</span>
+
+</div>
+<div class="viewcode-block" id="get_script_path"><a class="viewcode-back" href="../rsts/flib.html#flib.get_script_path">[docs]</a><span class="k">def</span> <span class="nf">get_script_path</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;From active Commands Editor Tab -&gt; file path.</span>
+<span class="sd">    </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">_int</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">nb</span><span class="o">.</span><span class="n">communicator</span><span class="o">.</span><span class="n">esp</span><span class="o">.</span><span class="n">editor</span><span class="o">.</span><span class="n">efpath</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="hex2bin"><a class="viewcode-back" href="../rsts/flib.html#flib.hex2bin">[docs]</a><span class="k">def</span> <span class="nf">hex2bin</span><span class="p">(</span><span class="n">hex_str</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;hexadecimal to binary conversion -&gt; string.</span>
+<span class="sd">    </span>
+<span class="sd">    Returns binary string of input hexadecimal string.</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">_str</span> <span class="o">=</span> <span class="n">hex_str</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s">&#39;L&#39;</span><span class="p">)</span>
+    <span class="n">_str</span> <span class="o">=</span> <span class="n">_str</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;0x&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">_str</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s">&#39;0x&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">_str</span>
+    <span class="nb">bin</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;0000&#39;</span><span class="p">,</span><span class="s">&#39;0001&#39;</span><span class="p">,</span><span class="s">&#39;0010&#39;</span><span class="p">,</span><span class="s">&#39;0011&#39;</span><span class="p">,</span>
+           <span class="s">&#39;0100&#39;</span><span class="p">,</span><span class="s">&#39;0101&#39;</span><span class="p">,</span><span class="s">&#39;0110&#39;</span><span class="p">,</span><span class="s">&#39;0111&#39;</span><span class="p">,</span>
+           <span class="s">&#39;1000&#39;</span><span class="p">,</span><span class="s">&#39;1001&#39;</span><span class="p">,</span><span class="s">&#39;1010&#39;</span><span class="p">,</span><span class="s">&#39;1011&#39;</span><span class="p">,</span>
+           <span class="s">&#39;1100&#39;</span><span class="p">,</span><span class="s">&#39;1101&#39;</span><span class="p">,</span><span class="s">&#39;1110&#39;</span><span class="p">,</span><span class="s">&#39;1111&#39;</span><span class="p">]</span>
+    <span class="k">return</span> <span class="s">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">bin</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">_str</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">base</span><span class="o">=</span><span class="mi">16</span><span class="p">)]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">_str</span><span class="p">))])</span>
+
+</div>
+<div class="viewcode-block" id="multi_choice_dialog"><a class="viewcode-back" href="../rsts/flib.html#flib.multi_choice_dialog">[docs]</a><span class="k">def</span> <span class="nf">multi_choice_dialog</span><span class="p">(</span><span class="n">options_list</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;function will be deprecated, please remove it from your scripts.</span>
+<span class="sd">    </span>
+<span class="sd">    Commands Editor user dialog -&gt; integer selection.</span>
+
+<span class="sd">    If text is not given, intern message will be used to inform user to choose</span>
+<span class="sd">    item(s) from options_list. If you want to mark multiple items, enter the </span>
+<span class="sd">    sum of item&#39;s numbers. Function returns a list of selected items.</span>
+
+<span class="sd">    Text output is Protocol Trace.</span>
+<span class="sd">    Text input is Interactive Console.</span>
+
+<span class="sd">    Example:</span>
+
+<span class="sd">        1. first</span>
+<span class="sd">        2. second</span>
+<span class="sd">        4. third</span>
+<span class="sd">        8. fourth          ... type 14 to select last 3 items.</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="c"># change this code, it has no pratical use, try a dialog box...</span>
+    <span class="n">numbers</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="o">**</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">options_list</span><span class="p">))]</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">text</span> <span class="ow">and</span> <span class="n">text</span> <span class="ow">or</span> <span class="s">&#39;CHOICE DIALOG&#39;</span>
+    <span class="k">print</span> <span class="s">&#39;</span><span class="se">\n\n</span><span class="s"> *************************************************************&#39;</span>\
+          <span class="s">&#39;</span><span class="se">\n\t</span><span class="s"> </span><span class="si">%s</span><span class="s">&#39;</span>\
+          <span class="s">&#39;</span><span class="se">\n\n</span><span class="s"> Please specify in Console&#39;</span>\
+          <span class="s">&#39; item(s) from following list:&#39;</span>\
+          <span class="s">&#39;</span><span class="se">\n\n\t</span><span class="si">%s</span><span class="s">&#39;</span>\
+          <span class="s">&#39;</span><span class="se">\n</span><span class="s"> *************************************************************&#39;</span>\
+          <span class="s">&#39;</span><span class="se">\n\n</span><span class="s">&#39;</span>\
+          <span class="o">%</span> <span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="s">&#39;</span><span class="se">\n\t</span><span class="s">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s">&#39;</span><span class="si">%d</span><span class="s">.</span><span class="se">\t</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="n">x</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">y</span><span class="p">))</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span>
+                                             <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">options_list</span><span class="p">)]))</span>
+    <span class="n">max_nr</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">numbers</span><span class="p">)</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">waitkey1</span><span class="p">(</span><span class="s">&#39;allowed interval &lt;1, </span><span class="si">%d</span><span class="s">&gt;</span><span class="se">\n\n</span><span class="s">&#39;</span>\
+                 <span class="s">&#39;PLEASE TYPE IN SHELL: &quot;_X(value)&quot; for selection.&#39;</span><span class="o">%</span><span class="n">max_nr</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="mi">0</span> <span class="o">&lt;</span> <span class="n">a</span> <span class="o">&lt;</span> <span class="n">max_nr</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">Error</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">&#39;Sorry, invalid selection. Try again.&#39;</span>
+        <span class="k">return</span> <span class="n">multi_choice_dialog</span><span class="p">(</span><span class="n">options_list</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+    <span class="n">toreturn</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">options_list</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">a</span> <span class="o">&gt;&gt;</span> <span class="n">x</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mi">1</span><span class="p">:</span> <span class="c"># bit high on position x?</span>
+            <span class="n">toreturn</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">options_list</span><span class="p">[</span><span class="n">x</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">toreturn</span>
+
+</div>
+<div class="viewcode-block" id="open_remote_file"><a class="viewcode-back" href="../rsts/flib.html#flib.open_remote_file">[docs]</a><span class="k">def</span> <span class="nf">open_remote_file</span><span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Open remote file from VISA interface -&gt; None.</span>
+<span class="sd">    </span>
+<span class="sd">    Device specifies remote device. Path is an absolute file path. If file</span>
+<span class="sd">    on device doesn&#39;t exist, &quot;path&quot; file content will carry error message.</span>
+<span class="sd">    </span>
+<span class="sd">    Note: File size is limited to 999.999999 MB.</span>
+<span class="sd">          Use remote device&#39;s &#39;D:&#39; drive (user guide recommendation). </span>
+<span class="sd">    </span>
+<span class="sd">    &#39;&#39;&#39;</span>  
+    <span class="n">content</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">instrument</span><span class="o">.</span><span class="n">ask</span><span class="p">(</span><span class="s">&#39;MMEM:DATA? &quot;</span><span class="si">%s</span><span class="s">&quot;&#39;</span> <span class="o">%</span><span class="n">path</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">content</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;#&#39;</span><span class="p">:</span> <span class="c">#i.e. #71126518; 7-&gt;nr of char specifing length</span>
+        <span class="n">content</span> <span class="o">=</span> <span class="n">content</span><span class="p">[</span><span class="mi">2</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">content</span><span class="p">[</span><span class="mi">1</span><span class="p">]):]</span> <span class="c">#download info cutted</span>
+        <span class="n">content</span> <span class="o">=</span> <span class="n">content</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\r\r\n</span><span class="s">&#39;</span><span class="p">,</span> <span class="s">&#39;</span><span class="se">\r\n</span><span class="s">&#39;</span><span class="p">)</span> <span class="c">#leading \r problem...</span>
+    <span class="k">elif</span> <span class="s">&#39;VI_ERROR&#39;</span> <span class="ow">in</span> <span class="n">content</span><span class="p">:</span>
+        <span class="n">_logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s">&#39;open_remote_file-&gt;content: </span><span class="si">%s</span><span class="s">&#39;</span><span class="p">,</span> <span class="n">content</span><span class="p">)</span>
+        <span class="k">return</span>
+    <span class="k">return</span> <span class="n">content</span>
+
+</div>
+<div class="viewcode-block" id="permutation"><a class="viewcode-back" href="../rsts/flib.html#flib.permutation">[docs]</a><span class="k">def</span> <span class="nf">permutation</span><span class="p">(</span><span class="nb">list</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Permutation -&gt; list.</span>
+<span class="sd">    </span>
+<span class="sd">    Takes a list of objects and returns a generator yielding all permutations.</span>
+
+<span class="sd">    Example for clarity:</span>
+<span class="sd">        list(permutation([1,2,3])) returns:</span>
+<span class="sd">        [[1, 2, 3],</span>
+<span class="sd">         [2, 1, 3],</span>
+<span class="sd">         [2, 3, 1],</span>
+<span class="sd">         [1, 3, 2],</span>
+<span class="sd">         [3, 1, 2],</span>
+<span class="sd">         [3, 2, 1]]</span>
+<span class="sd">    </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">def</span> <span class="nf">all_perms</span><span class="p">(</span><span class="nb">list</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="nb">list</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">perm</span> <span class="ow">in</span> <span class="n">all_perms</span><span class="p">(</span><span class="nb">list</span><span class="p">[</span><span class="mi">1</span><span class="p">:]):</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">perm</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+                    <span class="k">yield</span> <span class="n">perm</span><span class="p">[:</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="nb">list</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">perm</span><span class="p">[</span><span class="n">i</span><span class="p">:]</span>
+
+    <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">all_perms</span><span class="p">(</span><span class="nb">list</span><span class="p">):</span>
+        <span class="k">yield</span> <span class="n">field</span>
+
+</div>
+<div class="viewcode-block" id="print_list"><a class="viewcode-back" href="../rsts/flib.html#flib.print_list">[docs]</a><span class="k">def</span> <span class="nf">print_list</span><span class="p">(</span><span class="nb">list</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Print a list -&gt; None.</span>
+<span class="sd">    </span>
+<span class="sd">    Every element of the list will be printed at the new line.</span>
+<span class="sd">    </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="k">print</span> <span class="n">x</span>
+
+</div>
+<div class="viewcode-block" id="plot"><a class="viewcode-back" href="../rsts/flib.html#flib.plot">[docs]</a><span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="o">*</span><span class="n">arg</span><span class="p">,</span> <span class="o">**</span><span class="n">keyw</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Plot a graph -&gt; plot instance.</span>
+<span class="sd">    </span>
+<span class="sd">    Plot a single graph and displays the result in separate window. See plot </span>
+<span class="sd">    __doc__ at xlib.pltframe.plot. </span>
+<span class="sd">    </span>
+<span class="sd">    Example: plot([x*x for x in xrange(20)])</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">xlib</span><span class="o">.</span><span class="n">pltframe</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+    <span class="n">subplot</span> <span class="o">=</span> <span class="n">xlib</span><span class="o">.</span><span class="n">pltframe</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+    <span class="n">subplot</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">arg</span><span class="p">,</span> <span class="o">**</span><span class="n">keyw</span><span class="p">)</span>
+    <span class="n">xlib</span><span class="o">.</span><span class="n">pltframe</span><span class="o">.</span><span class="n">Show</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">subplot</span>
+
+</div>
+<div class="viewcode-block" id="report_off"><a class="viewcode-back" href="../rsts/flib.html#flib.report_off">[docs]</a><span class="k">def</span> <span class="nf">report_off</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;Disables logging output -&gt; None. </span>
+<span class="sd">    </span>
+<span class="sd">    All strings written to stdout are redirected to the &quot;black hole&quot;.</span>
+<span class="sd">    </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">class</span> <span class="nc">StdDummy</span><span class="p">:</span>
+        <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="k">pass</span>
+        <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">pass</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span> <span class="o">=</span> <span class="n">StdDummy</span><span class="p">()</span>
+
+</div>
+<div class="viewcode-block" id="report_on"><a class="viewcode-back" href="../rsts/flib.html#flib.report_on">[docs]</a><span class="k">def</span> <span class="nf">report_on</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;Enables logging output -&gt; None.</span>
+<span class="sd">    </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span> <span class="o">=</span> <span class="n">__builtin__</span><span class="o">.</span><span class="n">_stdout</span>
+
+</div>
+<div class="viewcode-block" id="sdir"><a class="viewcode-back" href="../rsts/flib.html#flib.sdir">[docs]</a><span class="k">def</span> <span class="nf">sdir</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="n">ignorecase</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> 
+         <span class="n">list_print</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">nobaseclass</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;sdir -&gt; list of strings. </span>
+<span class="sd">    </span>
+<span class="sd">    Returns list of attributes of specified object.</span>
+<span class="sd">    Optionally only these containing &#39;string&#39; with or without case sensitivity.</span>
+<span class="sd">    Optionally will every element of the list will be printed at the new line.</span>
+<span class="sd">    Optionally only these which are not contained in the base class of the obj</span>
+<span class="sd">    (baseclass reference stored in __base__ attribute). </span>
+<span class="sd">    </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="n">ignorecase</span><span class="p">:</span>
+        <span class="n">toreturn</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">string</span>
+                                          <span class="ow">or</span> <span class="n">string</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="n">x</span><span class="o">.</span><span class="n">lower</span><span class="p">()]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">toreturn</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">string</span> <span class="ow">or</span> <span class="n">string</span> <span class="ow">in</span> <span class="n">x</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">nobaseclass</span><span class="p">:</span>
+        <span class="c"># similar can be achieved with obj.__dict__.keys()</span>
+        <span class="n">instance_dir</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">toreturn</span><span class="p">)</span> <span class="c">#to avoid mutability</span>
+        <span class="n">base_dir</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s">&#39;__base__&#39;</span><span class="p">):</span> <span class="c">#asumably class or similar type</span>
+                <span class="n">base_dir</span> <span class="o">=</span> <span class="nb">dir</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">__base__</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">base_dir</span> <span class="o">=</span> <span class="nb">dir</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__base__</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="c">#e.g. NoneType</span>
+            <span class="n">_logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s">&#39;Exception in sdir func&#39;</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="p">[</span><span class="n">toreturn</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">elem</span><span class="p">)</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">instance_dir</span> <span class="k">if</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">base_dir</span><span class="p">]</span>
+        
+    <span class="n">toreturn</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">list_print</span><span class="p">:</span>
+        <span class="n">print_list</span><span class="p">(</span><span class="n">toreturn</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">toreturn</span>
+    
+</div>
+<div class="viewcode-block" id="set_system_path"><a class="viewcode-back" href="../rsts/flib.html#flib.set_system_path">[docs]</a><span class="k">def</span> <span class="nf">set_system_path</span><span class="p">(</span><span class="n">absolute_path_without_drive_letter</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Appends path to sys.path -&gt; bool success.</span>
+<span class="sd">    </span>
+<span class="sd">    It will be searched in range of all drivers + </span>
+<span class="sd">    absolute_path_without_drive_letter. </span>
+<span class="sd">    If absolute path exists, it will be appended to sys.path.</span>
+<span class="sd">    </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">ord</span><span class="p">(</span><span class="s">&#39;z&#39;</span><span class="p">),</span> <span class="nb">ord</span><span class="p">(</span><span class="s">&#39;a&#39;</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span> <span class="c">#z, y, x, w, ...</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="s">:</span><span class="se">\\</span><span class="s">&#39;</span> <span class="o">%</span><span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">),</span><span class="n">absolute_path_without_drive_letter</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">path</span><span class="p">]</span> <span class="k">if</span> <span class="n">path</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span> <span class="k">else</span> <span class="p">[])</span>
+            <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;sys.path contains now &quot;</span><span class="si">%s</span><span class="s">&quot;&#39;</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">True</span>
+    <span class="k">return</span> <span class="bp">False</span>
+
+</div>
+<div class="viewcode-block" id="show_last_error"><a class="viewcode-back" href="../rsts/flib.html#flib.show_last_error">[docs]</a><span class="k">def</span> <span class="nf">show_last_error</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;Shows last error logging traceback -&gt; None.</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">_int</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">eframe</span><span class="o">.</span><span class="n">Show</span><span class="p">()</span>
+
+</div>
+<div class="viewcode-block" id="shutdown"><a class="viewcode-back" href="../rsts/flib.html#flib.shutdown">[docs]</a><span class="k">def</span> <span class="nf">shutdown</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;Switches the local machine OFF -&gt; bool status.</span>
+<span class="sd">    </span>
+<span class="sd">    Also executes XPERIOR&#39;s OnClose action.</span>
+
+<span class="sd">    For security reasons the flag &#39;_int.control.ENABLE_SHUTDOWN&#39; has to be set </span>
+<span class="sd">    to True.</span>
+<span class="sd">    </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="n">_int</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">ENABLE_SHUTDOWN</span><span class="p">:</span>
+        <span class="n">wx</span><span class="o">.</span><span class="n">CallAfter</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">Shutdown</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">SHUTDOWN_POWEROFF</span><span class="p">)</span>
+        <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;shutdown-&gt;start&#39;</span><span class="p">)</span>
+        <span class="n">_int</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">OnClose</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">True</span>
+    <span class="k">return</span> <span class="bp">False</span>
+
+</div>
+<div class="viewcode-block" id="shutdown_on_stop"><a class="viewcode-back" href="../rsts/flib.html#flib.shutdown_on_stop">[docs]</a><span class="k">def</span> <span class="nf">shutdown_on_stop</span><span class="p">(</span><span class="n">enable</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Shutdown the PC when script in Commands Editor stops -&gt; bool status.</span>
+<span class="sd">    </span>
+<span class="sd">    If &#39;enable&#39; keyword is set to False, all shutdown procedures will be </span>
+<span class="sd">    discarded. See shutdown function at &#39;_int.control.shutdown()&#39; for more </span>
+<span class="sd">    info. </span>
+<span class="sd">    </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="kn">import</span> <span class="nn">threading</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">enable</span><span class="p">:</span>
+        <span class="n">_int</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">ENABLE_SHUTDOWN</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="k">return</span> <span class="bp">True</span>
+    <span class="k">elif</span> <span class="ow">not</span> <span class="n">_int</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">nb</span><span class="o">.</span><span class="n">communicator</span><span class="o">.</span><span class="n">vcp</span><span class="o">.</span><span class="n">running</span><span class="o">.</span><span class="n">Enabled</span><span class="p">:</span>
+        <span class="n">_logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s">&#39;shutdown_on_stop: start a script in Commands &#39;</span>\
+                       <span class="s">&#39;Editor before calling this function...&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">False</span>
+
+    <span class="n">_int</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">ENABLE_SHUTDOWN</span> <span class="o">=</span> <span class="bp">True</span>
+
+    <span class="k">def</span> <span class="nf">core</span><span class="p">():</span>
+        <span class="k">while</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">_int</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">nb</span><span class="o">.</span><span class="n">communicator</span><span class="o">.</span><span class="n">vcp</span><span class="o">.</span><span class="n">running</span><span class="o">.</span><span class="n">Enabled</span><span class="p">:</span>
+                <span class="n">shutdown</span><span class="p">()</span>
+                <span class="k">break</span>
+        <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;shutdown_on_stop: thread terminated...&#39;</span><span class="p">)</span>
+
+    <span class="n">thr</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">core</span><span class="p">)</span>
+    <span class="n">thr</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+    <span class="k">return</span> <span class="bp">True</span>
+
+</div>
+<div class="viewcode-block" id="simple_socket_query"><a class="viewcode-back" href="../rsts/flib.html#flib.simple_socket_query">[docs]</a><span class="k">def</span> <span class="nf">simple_socket_query</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">command</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">4754</span><span class="p">):</span> 
+    <span class="sd">&#39;&#39;&#39;Sends a command over socket interface -&gt; reply from host.</span>
+<span class="sd">    </span>
+<span class="sd">    Usage example:</span>
+<span class="sd">    </span>
+<span class="sd">    host = &#39;PDA887C0&#39;</span>
+<span class="sd">    power_on = &#39;Please switch on the UE&#39;</span>
+<span class="sd">    power_off = &#39;Power off UE&#39;</span>
+<span class="sd">    am_command(host, power_on)</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="kn">import</span> <span class="nn">socket</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_STREAM</span><span class="p">)</span>
+    <span class="n">s</span><span class="o">.</span><span class="n">connect</span><span class="p">((</span><span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">))</span>
+    <span class="n">s</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="se">\n</span><span class="s">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">command</span><span class="p">))</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">1024</span><span class="p">)</span>
+    <span class="n">s</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">data</span>
+
+</div>
+<div class="viewcode-block" id="single_choice_dialog"><a class="viewcode-back" href="../rsts/flib.html#flib.single_choice_dialog">[docs]</a><span class="k">def</span> <span class="nf">single_choice_dialog</span><span class="p">(</span><span class="n">options_list</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;function will be deprecated, please remove it from your scripts.</span>
+<span class="sd">    </span>
+<span class="sd">    Commands Editor user dialog -&gt; integer selection.</span>
+
+<span class="sd">    If text is not given, intern message will be used to inform user to choose</span>
+<span class="sd">    one of the items from options_list. Function returns selected item.</span>
+
+<span class="sd">    Text output is Protocol Trace.</span>
+<span class="sd">    Text input is Interactive Console.</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="c"># change this code, it has no pratical use, try a dialog box...</span>
+    <span class="n">numbers</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">options_list</span><span class="p">))]</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">text</span> <span class="ow">and</span> <span class="n">text</span> <span class="ow">or</span> <span class="s">&#39;SINGLE CHOICE DIALOG&#39;</span>
+    <span class="k">print</span> <span class="s">&#39;</span><span class="se">\n\n</span><span class="s"> *************************************************************&#39;</span>\
+          <span class="s">&#39;</span><span class="se">\n\t</span><span class="s"> </span><span class="si">%s</span><span class="s">&#39;</span>\
+          <span class="s">&#39;</span><span class="se">\n\n</span><span class="s"> Please specify in Console&#39;</span>\
+          <span class="s">&#39; one item from following list:&#39;</span>\
+          <span class="s">&#39;</span><span class="se">\n\n\t</span><span class="si">%s</span><span class="s">&#39;</span>\
+          <span class="s">&#39;</span><span class="se">\n</span><span class="s"> *************************************************************&#39;</span>\
+          <span class="s">&#39;</span><span class="se">\n\n</span><span class="s">&#39;</span>\
+          <span class="o">%</span> <span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="s">&#39;</span><span class="se">\n\t</span><span class="s">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s">&#39;</span><span class="si">%d</span><span class="s">.</span><span class="se">\t</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span><span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">y</span><span class="p">))</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span>
+                                             <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">options_list</span><span class="p">)]))</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">waitkey1</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">(</span><span class="si">%s</span><span class="s">?) --&gt; </span><span class="se">\n\n</span><span class="s">&#39;</span>\
+                 <span class="s">&#39;PLEASE TYPE IN SHELL: &quot;_X(</span><span class="se">\&#39;</span><span class="s">value</span><span class="se">\&#39;</span><span class="s">)&quot; for selection.&#39;</span>\
+                 <span class="o">%</span><span class="s">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">numbers</span><span class="p">))</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">numbers</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">&#39;Sorry, invalid selection. Try again.&#39;</span>
+        <span class="k">return</span> <span class="n">single_choice_dialog</span><span class="p">(</span><span class="n">options_list</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">options_list</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+
+</div>
+<div class="viewcode-block" id="stop_on_visa_status"><a class="viewcode-back" href="../rsts/flib.html#flib.stop_on_visa_status">[docs]</a><span class="k">def</span> <span class="nf">stop_on_visa_status</span><span class="p">(</span><span class="n">instrument</span><span class="p">,</span> <span class="n">periodically</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Stops on remote device timeout(s) -&gt; None (throw exception).</span>
+<span class="sd">    </span>
+<span class="sd">    If Visa Error Status (VES) is detected, program execution will raise an </span>
+<span class="sd">    exception. On next script start, execution stops on first occurrence of </span>
+<span class="sd">    VES again if &quot;periodically&quot; is True; after 10 otherwise.</span>
+<span class="sd">    </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="n">periodically</span><span class="p">:</span>
+        <span class="n">instrument</span><span class="o">.</span><span class="n">instrument</span><span class="o">.</span><span class="n">error</span> <span class="o">=</span> <span class="o">-</span><span class="mi">2</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">instrument</span><span class="o">.</span><span class="n">instrument</span><span class="o">.</span><span class="n">error</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+
+</div>
+<div class="viewcode-block" id="time_since_start"><a class="viewcode-back" href="../rsts/flib.html#flib.time_since_start">[docs]</a><span class="k">def</span> <span class="nf">time_since_start</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;Time since last script start -&gt; formated string.</span>
+<span class="sd">    </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">return</span> <span class="n">_int</span><span class="o">.</span><span class="n">protocol</span><span class="o">.</span><span class="n">msToTime</span><span class="p">(</span><span class="n">_int</span><span class="o">.</span><span class="n">protocol</span><span class="o">.</span><span class="n">g_time</span><span class="o">.</span><span class="n">GetTimeSinceStart</span><span class="p">())</span>
+
+</div>
+<div class="viewcode-block" id="waitkey"><a class="viewcode-back" href="../rsts/flib.html#flib.waitkey">[docs]</a><span class="k">def</span> <span class="nf">waitkey</span><span class="p">(</span><span class="n">message</span><span class="o">=</span><span class="s">&quot;press ok to continue&quot;</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Dialog box -&gt; None.</span>
+<span class="sd">    </span>
+<span class="sd">    Freeze script execution until user responds on initiated modal message box.</span>
+<span class="sd">    </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    
+    <span class="k">if</span> <span class="n">_int</span><span class="o">.</span><span class="n">_multitesting</span><span class="p">:</span>
+        <span class="n">_logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s">&#39;waitkey-&gt;veto; reason: multitesting, message: </span><span class="si">%s</span><span class="s">&#39;</span><span class="p">,</span> 
+                       <span class="n">message</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">wx</span><span class="o">.</span><span class="n">MessageDialog</span><span class="p">(</span><span class="n">_int</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">frame</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span>
+                         <span class="s">&#39;Waitkey Message&#39;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="n">wx</span><span class="o">.</span><span class="n">OK</span><span class="p">)</span><span class="o">.</span><span class="n">ShowModal</span><span class="p">()</span>
+            
+</div>
+<div class="viewcode-block" id="waitkey1"><a class="viewcode-back" href="../rsts/flib.html#flib.waitkey1">[docs]</a><span class="k">def</span> <span class="nf">waitkey1</span><span class="p">(</span><span class="n">info</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Script execution will be paused -&gt; None.</span>
+<span class="sd">    </span>
+<span class="sd">    Will be paused on this position until &#39;_X&#39; in Interactive Console </span>
+<span class="sd">    is typed. Then, script execution goes further.</span>
+<span class="sd">    </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">def</span> <span class="nf">sleeper</span><span class="p">():</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.05</span><span class="p">)</span>
+
+    <span class="n">__builtin__</span><span class="o">.</span><span class="n">_X</span> <span class="o">=</span> <span class="n">Hidden_waitkey1</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">_int</span><span class="o">.</span><span class="n">_multitesting</span><span class="p">:</span>
+        <span class="n">__builtin__</span><span class="o">.</span><span class="n">_X</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">_logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s">&#39;waitkey1-&gt;veto; reason: multitesting, message: </span><span class="si">%s</span><span class="s">&#39;</span><span class="p">,</span> 
+                       <span class="n">message</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">__builtin__</span><span class="o">.</span><span class="n">_X</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">info</span><span class="p">:</span>
+        <span class="n">_logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s">&quot;script paused; &quot;</span>\
+                       <span class="s">&quot;to unpause type &#39;_X&#39; in Interactive Console.&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">_logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">info</span><span class="p">)</span>
+    <span class="k">while</span> <span class="n">__builtin__</span><span class="o">.</span><span class="n">_X</span><span class="o">.</span><span class="n">x</span><span class="p">:</span>
+        <span class="c"># need to be done this way, when in &quot;Xperior&#39;s thread&quot;</span>
+        <span class="n">sleeper</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">__builtin__</span><span class="o">.</span><span class="n">_X</span><span class="o">.</span><span class="n">_obj</span>
+
+</div>
+<span class="k">def</span> <span class="nf">_custom_dialog</span><span class="p">(</span><span class="n">dialog</span><span class="p">,</span> <span class="n">outattr</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">keyw</span><span class="p">):</span>    
+    <span class="sd">&#39;&#39;&#39;Instance a dialog and show it modal -&gt; getattr(dialog, &#39;outattr&#39;).</span>
+<span class="sd">    </span>
+<span class="sd">    Note: internal function.</span>
+<span class="sd">    </span>
+<span class="sd">    Any dialog can be started either from Shell or from Communicator&#39;s Editor.</span>
+<span class="sd">    The second case is tricky, because not any dialog can&#39;t be displayed</span>
+<span class="sd">    because of not thread-save nature of used widgets. Therefore a script runs</span>
+<span class="sd">    into the possition of this function, is stopped, dialog is shown and than</span>
+<span class="sd">    started again -&gt; such function must be placed to the most top of the </span>
+<span class="sd">    script.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples:</span>
+<span class="sd">    xlib._custom_dialog(DeviceDialog, &#39;dev&#39;)</span>
+<span class="sd">    xlib._custom_dialog(wx.FileDialog, &#39;Path&#39;, parent=_int.app.frame)</span>
+<span class="sd">    </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">def</span> <span class="nf">__stop_start</span><span class="p">(</span><span class="n">dialog</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">keyw</span><span class="p">):</span>    
+        <span class="n">dlg</span> <span class="o">=</span> <span class="n">dialog</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">keyw</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">dlg</span><span class="o">.</span><span class="n">ShowModal</span><span class="p">()</span> <span class="o">==</span> <span class="n">wx</span><span class="o">.</span><span class="n">ID_OK</span><span class="p">:</span>
+            <span class="nb">globals</span><span class="p">()[</span><span class="s">&#39;__dialog__&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dlg</span>
+            <span class="n">_int</span><span class="o">.</span><span class="n">vcp</span><span class="o">.</span><span class="n">executeRun</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">execute_stop</span><span class="p">()</span>
+            
+    <span class="k">if</span> <span class="n">_int</span><span class="o">.</span><span class="n">vcp</span><span class="o">.</span><span class="n">running</span><span class="o">.</span><span class="n">Label</span> <span class="o">==</span> <span class="n">_int</span><span class="o">.</span><span class="n">vcp</span><span class="o">.</span><span class="n">LABEL_RUNNING</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">globals</span><span class="p">()</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="s">&#39;__dialog__&#39;</span><span class="p">):</span>
+            <span class="n">_int</span><span class="o">.</span><span class="n">vcp</span><span class="o">.</span><span class="n">post_calls</span><span class="p">(</span><span class="n">__stop_start</span><span class="p">,</span> <span class="n">dialog</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">keyw</span><span class="p">)</span>
+            <span class="n">execute_stop</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>        
+            <span class="n">value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="nb">globals</span><span class="p">()[</span><span class="s">&#39;__dialog__&#39;</span><span class="p">],</span> <span class="n">outattr</span><span class="p">)</span>
+            <span class="nb">globals</span><span class="p">()</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;__dialog__&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">value</span>
+    <span class="k">else</span><span class="p">:</span> <span class="c">#otherwise started in main thread</span>
+        <span class="n">instance</span> <span class="o">=</span> <span class="n">dialog</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">keyw</span><span class="p">)</span>
+        <span class="n">instance</span><span class="o">.</span><span class="n">ShowModal</span><span class="p">()</span>
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="n">outattr</span><span class="p">)</span>
+        
+
+<span class="k">def</span> <span class="nf">_device_dialog</span><span class="p">():</span>
+    <span class="k">return</span> <span class="n">_custom_dialog</span><span class="p">(</span><span class="n">DeviceDialog</span><span class="p">,</span> <span class="s">&#39;dev&#39;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_import</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">statement</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="n">lookup_level</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">persistent</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Special import -&gt; None.</span>
+
+<span class="sd">    Note: Internal function.</span>
+<span class="sd">    </span>
+<span class="sd">    Import module specified with the &#39;name&#39;. statement can be any valid import</span>
+<span class="sd">    expression such even &#39;from w.x import y as z&#39;.If persistent is set to True,</span>
+<span class="sd">    imported modules stay in namespace forever and will NOT be reloaded with</span>
+<span class="sd">    new script run from Communicator&#39;s Editor.</span>
+<span class="sd">    </span>
+<span class="sd">    If import fails with ImportError, lookup_level keyword comes into play. </span>
+<span class="sd">    Integer specifies number of parent level directories to search for a </span>
+<span class="sd">    &#39;name&#39;, starting with dirname of currently opended filepath in Commands </span>
+<span class="sd">    Editor, if no, cwd. Note that searching starts from the most top parent </span>
+<span class="sd">    directory, which can resolve in long search time for high indexes.</span>
+<span class="sd">    </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="c"># imp module is also an option</span>
+    <span class="n">statement</span> <span class="o">=</span> <span class="n">statement</span> <span class="ow">or</span> <span class="s">&#39;import </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span><span class="n">name</span>
+    <span class="k">def</span> <span class="nf">do_imp</span><span class="p">(</span><span class="n">statement</span><span class="p">,</span> <span class="n">persistent</span><span class="p">):</span> 
+        <span class="n">glob</span> <span class="o">=</span> <span class="nb">globals</span><span class="p">()</span>
+        <span class="n">imports</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">sysmodules</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">exec</span> <span class="n">statement</span> <span class="ow">in</span> <span class="n">imports</span>
+        <span class="n">imports</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;__builtins__&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">module</span> <span class="ow">in</span> <span class="n">imports</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">_int</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">LocalDict</span><span class="o">.</span><span class="n">_locals</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">module</span>
+            <span class="k">except</span> <span class="ne">NameError</span><span class="p">:</span>
+                <span class="k">pass</span>
+            <span class="n">glob</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">module</span> <span class="c">#xlib globals differs from default namespace!</span>
+        <span class="k">if</span> <span class="n">persistent</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">sysmodules</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="n">key</span><span class="p">):</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">_int</span><span class="o">.</span><span class="n">vcp</span><span class="o">.</span><span class="n">_modules</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+                    <span class="k">except</span> <span class="ne">NameError</span><span class="p">:</span>
+                        <span class="k">pass</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">do_imp</span><span class="p">(</span><span class="n">statement</span><span class="p">,</span> <span class="n">persistent</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="n">dirname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span>
+        <span class="n">top</span> <span class="o">=</span> <span class="n">dirname</span><span class="p">(</span><span class="n">_int</span><span class="o">.</span><span class="n">editor</span><span class="o">.</span><span class="n">executed_book</span><span class="o">.</span><span class="n">efpath</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">())</span>
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">lookup_level</span><span class="p">):</span>
+            <span class="n">top</span> <span class="o">=</span> <span class="n">dirname</span><span class="p">(</span><span class="n">top</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">lookup_level</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&quot;*INFO: Searching for object to import: </span><span class="si">%s</span><span class="s">...&quot;</span> <span class="o">%</span><span class="n">name</span>
+            
+        <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;_import-&gt;top level directory: </span><span class="si">%s</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">top</span><span class="p">)</span>
+        <span class="n">_module</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+        <span class="k">for</span> <span class="n">path</span><span class="p">,</span> <span class="n">dirs</span><span class="p">,</span> <span class="n">files</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">top</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">dirs</span><span class="p">:</span> <span class="c">#it is a package</span>
+                <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+                <span class="k">break</span>
+            <span class="n">_module</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">files</span> <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">x</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">_module</span><span class="p">:</span> <span class="c">#it is a module</span>
+                <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+                <span class="k">break</span>
+        <span class="n">do_imp</span><span class="p">(</span><span class="n">statement</span><span class="p">,</span> <span class="n">persistent</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_use_module</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">lookup_level</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;import special module -&gt; None.</span>
+<span class="sd">    </span>
+<span class="sd">    Note: Internal function.</span>
+<span class="sd">    </span>
+<span class="sd">    Module name &quot;name&quot; is than part of your current namespace.</span>
+<span class="sd">    </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">_import</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">lookup_level</span><span class="o">=</span><span class="n">lookup_level</span><span class="p">)</span>
+    <span class="n">_int</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">LocalDict</span><span class="o">.</span><span class="n">_locals</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">update_namespace</span><span class="p">(</span>
+                                                <span class="n">_int</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">LocalDict</span><span class="o">.</span><span class="n">_locals</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_store_gui_settings</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;Store the GUI setting into the win registry -&gt; None.</span>
+<span class="sd">    </span>
+<span class="sd">    Stores the settings as normally done during XPERIOR&#39;s OnClose procedure.</span>
+<span class="sd">    </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">_int</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">StoreSettings2Registry</span><span class="p">()</span>    
+<span class="c">##-----------------------------------------------------------------------------</span>
+            
+
+<span class="c">## init &amp; rest ##--------------------------------------------------------------</span>
+<span class="n">xlib</span> <span class="o">=</span> <span class="n">Xlib</span><span class="p">()</span>
+<span class="n">xlib</span><span class="o">.</span><span class="n">MessageDialog</span> <span class="o">=</span> <span class="n">MessageDialog</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">xlib</span><span class="o">.</span><span class="n">rs_scpi</span> <span class="o">=</span> <span class="n">rs_scpi</span>
+    <span class="n">xlib</span><span class="o">.</span><span class="n">rs_lib</span> <span class="o">=</span> <span class="n">rs_lib</span>
+<span class="k">except</span> <span class="ne">NameError</span><span class="p">:</span>
+    <span class="k">pass</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">xlib</span><span class="o">.</span><span class="n">tcframe</span> <span class="o">=</span> <span class="n">tcframe</span> <span class="o">=</span> <span class="n">create_frame</span><span class="p">(</span><span class="s">&#39;TextCtrl&#39;</span><span class="p">)</span>
+    <span class="n">xlib</span><span class="o">.</span><span class="n">pltframe</span> <span class="o">=</span> <span class="n">pltframe</span> <span class="o">=</span> <span class="n">create_frame</span><span class="p">(</span><span class="s">&#39;Plot&#39;</span><span class="p">)</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="k">pass</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">ct</span> <span class="o">=</span> <span class="n">Cleartool</span><span class="p">()</span>
+    <span class="n">xlib</span><span class="o">.</span><span class="n">ct</span> <span class="o">=</span> <span class="n">ct</span>
+<span class="k">except</span> <span class="ne">IOError</span><span class="p">:</span>
+    <span class="k">pass</span>
+<span class="c">##-----------------------------------------------------------------------------</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">Xperior 1.3.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, noriba GmbH.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
